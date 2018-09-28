@@ -1,7 +1,7 @@
 # INTRODUCTION
-this is benzayolo
-this is Brendan
-this is Louis
+this is benzayolo !
+this is Brendan ! 
+this is Louis !
 This is a JAVA framework for the Traveling Salesman Problem (TSP).
 
 This framework was created by Fabien Léhuédé, Damien Prot and Axel Grimault for pedagogic issues at [Institut Mines Télécom Atlantique](https://www.imt-atlantique.fr/).
