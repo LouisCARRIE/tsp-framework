@@ -76,12 +76,12 @@ public class TSPSolver {
 		// Example of a time loop
 		long startTime = System.currentTimeMillis();
 		long spentTime = 0;
-		do
+		/*do
 		{
 			// TODO
 			// Code a loop base on time here
 			spentTime = System.currentTimeMillis() - startTime;
-		}while(spentTime < (m_timeLimit * 1000 - 100) );
+		}while(spentTime < (m_timeLimit * 1000 - 100) );*/
 		
 		PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
 		method.solve();

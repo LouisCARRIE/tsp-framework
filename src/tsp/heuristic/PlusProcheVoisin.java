@@ -10,12 +10,33 @@ public class PlusProcheVoisin extends AHeuristic{
 	public PlusProcheVoisin(Instance instance) throws Exception {
 		super(instance, "plusProcheVoisin");
 	}
+	
+	public static List<Integer> remove1(List<Integer> l, int point) {
+		List<Integer> t = new ArrayList<Integer>();
+		for(int e : l) {
+			if(e != point) {
+				t.add(e);
+			}
+		}
+		return t;
+	}
+	 public static String toArray1(List<Integer> l) {
+		String res = "";
+		for(int e : l) {
+			res += e + " ";
+		}
+		return res;
+	}
+	
 
 	@Override
 	public void solve() throws Exception {
 		int nbVilles = this.m_instance.getNbCities(); // super à la place de this ?
 		long[] distances = new long[nbVilles]; // liste des distances en fontion du point de départ
 		List<List<Integer>> solutions = new ArrayList<List<Integer>>(); // liste des solutions en fonction du point de départ
+		for(int i = 0; i<nbVilles; i++) {
+			solutions.add(new ArrayList<Integer>());
+		}
 		for(int pointDepart = 0; pointDepart < 1; pointDepart ++) { //A MODIFIER
 			int pointCourant = pointDepart;
 			solutions.get(pointDepart).add(pointDepart);
@@ -34,6 +55,9 @@ public class PlusProcheVoisin extends AHeuristic{
 						pointSuivant = i;
 					}
 				}
+				System.out.println(pointCourant);
+				System.out.println(villesRestantes);
+				villesRestantes = remove1(villesRestantes, pointSuivant);
 				pointCourant = pointSuivant;
 				distance += distanceTemp;
 				solutions.get(pointDepart).add(pointSuivant);
