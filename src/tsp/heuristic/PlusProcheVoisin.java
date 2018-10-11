@@ -20,13 +20,6 @@ public class PlusProcheVoisin extends AHeuristic{
 		}
 		return t;
 	}
-	 public static String toArray1(List<Integer> l) {
-		String res = "";
-		for(int e : l) {
-			res += e + " ";
-		}
-		return res;
-	}
 	
 
 	@Override
@@ -37,7 +30,7 @@ public class PlusProcheVoisin extends AHeuristic{
 		for(int i = 0; i<nbVilles; i++) {
 			solutions.add(new ArrayList<Integer>());
 		}
-		for(int pointDepart = 0; pointDepart < 1; pointDepart ++) { //A MODIFIER
+		for(int pointDepart = 0; pointDepart < nbVilles; pointDepart ++) { //A MODIFIER
 			int pointCourant = pointDepart;
 			solutions.get(pointDepart).add(pointDepart);
 			long distance = 0;
@@ -45,18 +38,16 @@ public class PlusProcheVoisin extends AHeuristic{
 			for (int j = 0; j<nbVilles; j++) {
 				villesRestantes.add(j);
 			}
-			villesRestantes.remove(pointDepart);
+			villesRestantes = remove1(villesRestantes, pointDepart);
 			for (int k = 0; k<nbVilles-1; k++) {
-				long distanceTemp = this.m_instance.getDistances(pointCourant, (pointCourant+1)%nbVilles);
-				int pointSuivant = (pointCourant+1)%nbVilles;
+				long distanceTemp = this.m_instance.getDistances(pointCourant, villesRestantes.get(0));
+				int pointSuivant = villesRestantes.get(0);
 				for(int i : villesRestantes) { // on cherche la ville la plus proche du point courant
 					if (this.m_instance.getDistances(pointCourant, i) < distanceTemp) {
 						distanceTemp = this.m_instance.getDistances(pointCourant, i);
 						pointSuivant = i;
 					}
 				}
-				System.out.println(pointCourant);
-				System.out.println(villesRestantes);
 				villesRestantes = remove1(villesRestantes, pointSuivant);
 				pointCourant = pointSuivant;
 				distance += distanceTemp;
