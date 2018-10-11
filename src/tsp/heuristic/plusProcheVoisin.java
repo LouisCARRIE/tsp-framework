@@ -18,7 +18,7 @@ public class plusProcheVoisin extends AHeuristic{
 		for(int pointDepart = 0; pointDepart < nbVilles; pointDepart ++) {
 			int pointCourant = pointDepart;
 			solutions.get(pointDepart).add(pointDepart);
-			long distance = 0;
+			long distance = 0; 
 			for (int k = 0; k<nbVilles; k++) {
 				long distanceTemp = this.m_instance.getDistances(pointCourant, (pointCourant+1)%nbVilles);
 				int pointSuivant = (pointCourant+1)%nbVilles;
