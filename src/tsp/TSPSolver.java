@@ -1,5 +1,7 @@
 package tsp;
 
+import tsp.heuristic.PlusProcheVoisin;
+
 /**
  * 
  * This class is the place where you should enter your code and from which you can create your own objects.
@@ -80,6 +82,10 @@ public class TSPSolver {
 			// Code a loop base on time here
 			spentTime = System.currentTimeMillis() - startTime;
 		}while(spentTime < (m_timeLimit * 1000 - 100) );
+		
+		PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
+		method.solve();
+		this.setSolution(method.getSolution());
 		
 	}
 
