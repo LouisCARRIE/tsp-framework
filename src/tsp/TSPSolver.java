@@ -1,5 +1,6 @@
 package tsp;
 
+import tsp.heuristic.ArbreCouvrant;
 import tsp.heuristic.PlusProcheVoisin;
 
 /**
@@ -83,7 +84,7 @@ public class TSPSolver {
 			spentTime = System.currentTimeMillis() - startTime;
 		}while(spentTime < (m_timeLimit * 1000 - 100) );*/
 		
-		PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
+		ArbreCouvrant method = new ArbreCouvrant(m_instance);
 		method.solve();
 		this.setSolution(method.getSolution());
 		
