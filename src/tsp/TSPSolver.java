@@ -1,5 +1,6 @@
 package tsp;
 
+import tsp.heuristic.AlgorithmeGenetique;
 import tsp.heuristic.AlgorithmeGlouton;
 import tsp.heuristic.ArbreCouvrant;
 import tsp.heuristic.PlusProcheVoisin;
@@ -92,6 +93,10 @@ public class TSPSolver {
 		/*AlgorithmeGlouton glouton = new AlgorithmeGlouton(m_instance);
 		glouton.solve();
 		this.setSolution(glouton.getSolution());*/
+		
+		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
+		genetique.solve();
+		this.setSolution(genetique.getSolution());*/
 		
 	}
 
