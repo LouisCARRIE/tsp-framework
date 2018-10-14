@@ -54,12 +54,14 @@ public class ArbreCouvrant extends AHeuristic{
 			villesATraitees = remove1(villesATraitees, vF);
 			villesMarquees.add(vF);
 			arbre.get(vP).add(vF);
+			arbre.get(vF).add(vP);
 		}
 		return arbre;
 	}
 	
 	public void explorer(List<List<Integer>> arbre, int villeVisitee) throws Exception {
 		this.villesMarquees.add(villeVisitee);
+		System.out.println(villeVisitee);
 		for(int villeFils : arbre.get(villeVisitee)) {
 			if(!(this.villesMarquees.contains(villeFils))) {
 				explorer(arbre, villeFils);
@@ -70,13 +72,16 @@ public class ArbreCouvrant extends AHeuristic{
 	@Override
 	public void solve() throws Exception {
 		List<List<Integer>> arbre = algoPrim(this.m_instance);
-		explorer(arbre, 0);
+		System.out.println(arbre);
+		int debut = 4; //faire boucle for sur la ville de depart 'debut'
+		explorer(arbre, debut);
 		Solution sol = new Solution(this.m_instance);
 		int k = 0; 	 	 	  		  		   	 	
 		for(int i : this.villesMarquees) { 	 	 	  		  		   	 	
 			sol.setCityPosition(i, k); 	 	 	  		  		   	 	
 			k++; 	 	 	  		  		   	 	
-		} 	 	 	  		  		   	 	
+		}
+		sol.setCityPosition(debut, this.m_instance.getNbCities());
 		this.m_solution = sol;
 	}
 	
