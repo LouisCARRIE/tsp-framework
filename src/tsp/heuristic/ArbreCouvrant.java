@@ -71,7 +71,7 @@ public class ArbreCouvrant extends AHeuristic{
 	public void solve() throws Exception {
 		List<List<Integer>> arbre = algoPrim(this.m_instance);
 		explorer(arbre, 0);
-		Solution sol = new Solution(this.m_instance); 	 	 	  		  		   	 	
+		Solution sol = new Solution(this.m_instance);
 		int k = 0; 	 	 	  		  		   	 	
 		for(int i : this.villesMarquees) { 	 	 	  		  		   	 	
 			sol.setCityPosition(i, k); 	 	 	  		  		   	 	

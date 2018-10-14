@@ -85,6 +85,7 @@ public class TSPSolver {
 		}while(spentTime < (m_timeLimit * 1000 - 100) );*/
 		
 		ArbreCouvrant method = new ArbreCouvrant(m_instance);
+		//PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
 		method.solve();
 		this.setSolution(method.getSolution());
 		
