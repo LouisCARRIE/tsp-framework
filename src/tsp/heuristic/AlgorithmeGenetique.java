@@ -7,7 +7,6 @@ public class AlgorithmeGenetique extends AHeuristic {
 
 	public AlgorithmeGenetique(Instance instance) throws Exception {
 		super(instance, "AlgorithmeGenetique");
-		// TODO Auto-generated constructor stub
 	}
 	
 	
@@ -118,7 +117,7 @@ public class AlgorithmeGenetique extends AHeuristic {
 	}
 	
 	
-	//fonctionne
+	//(a revoir (si on genere une pop de 100.000 ne fonctionne pas ?))
 	public int[][] selectionIndividus(int[][] population) throws Exception {
 		//processus de la "roulette wheel selection"
 		//performance : la performance d'un individu
@@ -135,7 +134,10 @@ public class AlgorithmeGenetique extends AHeuristic {
 				indiceIndividuSelectionne = indiceIndividuSelectionne + 1;
 				t = t + performances[indiceIndividuSelectionne];
 			}
-			nouvellepopulation[j] = population[indiceIndividuSelectionne];
+			//il ne faut pas faire nouvellepopulation[j] = population[indiceIndividuSelectionne];
+			//car on peut avoir dans ce cas nouvellepopulation[j] == nouvellepopulation[j'] avec j!=j'
+			//alors qu'on voudrait avoir nouvellepopulation[j] equals nouvellepopulation[j'] !!
+			nouvellepopulation[j] = copyOf(population[indiceIndividuSelectionne]);
 			
 		}
 		return nouvellepopulation;
@@ -143,7 +145,37 @@ public class AlgorithmeGenetique extends AHeuristic {
 	}
 	
 	
-	//a revoir
+	//fonctionne
+	public static int[] copyOf(int[] individu) {
+		int[] copyOfIndividu = new int[individu.length];
+		for (int i=0 ; i<individu.length ; i++) {
+			copyOfIndividu[i] = individu[i];
+		}
+		return copyOfIndividu;
+	}
+	
+	
+	//fonctionne
+	public static boolean test1(int[] individu, int[] copyOfIndividu) throws Exception {
+		return individu==copyOfIndividu;
+	}
+	
+	
+	//fonctionne
+	public static boolean test2(int[] individu, int[] copyOfIndividu) throws Exception {
+		int j = 0;
+		if (individu.length==copyOfIndividu.length) {
+			while (j<individu.length&&individu[j]==copyOfIndividu[j]) {
+				j = j + 1;
+			}
+			return j==individu.length;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	//a revoir ; static ou pas ?
 	public static int[][] hybridation(int[][] population) throws Exception {
 		double probahybridation = 0.66;
 		int n = population[0].length;
@@ -185,10 +217,43 @@ public class AlgorithmeGenetique extends AHeuristic {
 		return population;
 		
 	}
-			
+	
+	
+	//fonctionne
+	public static void mutationIndividu(int[] individu) throws Exception {
+		int i = 1 + (int) (Math.random()*(individu.length-3));
+		int j = i + 1;
+		echangerVilles(individu, i, j);
+	}
+	
+	
+	//fonctionne 
+	public static void mutationPopulation(int[][] population) throws Exception {
+		for(int i=0 ; i<population.length ; i++) {
+			double r = Math.random();
+			if (r<0.2) {
+				mutationIndividu(population[i]);
+			}
+		}
+	}
+	
+	
+	//fonctionne
+	public int[] meilleurIndividu(int[][] population) throws Exception {
+		int indicemeilleurindiv = 0;
+		for(int i=1 ; i<population.length ; i++) {
+			if (evaluateIndividu(population[i])<evaluateIndividu(population[indicemeilleurindiv])) {
+				indicemeilleurindiv = i;	
+			}
+		}
+		return population[indicemeilleurindiv];
+	}
+	
+	
+	//a revoir
 	@Override
 	public void solve() throws Exception {
-		//n = taille de la population ; n>=log(l) avec l la taille d'un invididu
+		/*//n = taille de la population ; n>=log(l) avec l la taille d'un invididu
 		int n = 10;
 		if (n%2!=0) {
 			throw new Exception("la taille de la population doit etre un nombre pair");
@@ -199,8 +264,23 @@ public class AlgorithmeGenetique extends AHeuristic {
 			for (int i=0 ; i<=this.m_instance.getNbCities() ; i++) {
 				this.m_solution.setCityPosition(g[i], i);;
 			}
+		}*/
+		
+		
+		int[][] population;
+		population = genererPopulation(20);
+		population = selectionIndividus(population);
+
+		//population = hybridation(population);
+		//System.out.println("la population hybridee est " + toString2(population));
+		
+		mutationPopulation(population);
+		int[] meilleurIndividu = meilleurIndividu(population);
+		Solution s = new Solution(m_instance);
+		for (int i = 0; i<meilleurIndividu.length ; i++) {
+			s.setCityPosition(meilleurIndividu[i], i);
 		}
-		// TODO Auto-generated method stub
+		m_solution = s;
 		
 	}
 	
