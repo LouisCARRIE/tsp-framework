@@ -1,5 +1,5 @@
 package tsp.util;
-
+//==
 public class CoupleVisite {
 	double phero;
 	boolean b;
