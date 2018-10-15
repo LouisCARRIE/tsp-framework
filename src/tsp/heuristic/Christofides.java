@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tsp.Instance;
-
+//hgtjrr
 public class Christofides extends AHeuristic{
 
 	public Christofides(Instance instance) throws Exception {
