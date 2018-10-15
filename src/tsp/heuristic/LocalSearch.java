@@ -8,7 +8,7 @@ import tsp.Solution;
 
 public class LocalSearch extends AHeuristic {
 
-	
+
 	public LocalSearch(Instance instance) throws Exception {
 		super(instance, "Algorithme LocalSearch");
 		
@@ -85,7 +85,7 @@ public class LocalSearch extends AHeuristic {
 	
 	
 	public int[] localSearch() throws Exception {
-		//localSearch échange de i et j
+		//localSearch échange i et j
 		int[] individu = genererIndividu();
 		double delta = Double.MAX_VALUE;
 		while (delta>0) {
@@ -101,6 +101,8 @@ public class LocalSearch extends AHeuristic {
 	
 
 	@Override
+	//méthode trop longue pour les problemes contenant plus de 320 villes !
+	//dans la méthode localSearch remplacer la boucle while par un fort ?
 	public void solve() throws Exception {
 		int[] individu = genererIndividu();
 		individu = localSearch();

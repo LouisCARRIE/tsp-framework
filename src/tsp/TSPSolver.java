@@ -87,10 +87,10 @@ public class TSPSolver {
 			spentTime = System.currentTimeMillis() - startTime;
 		}while(spentTime < (m_timeLimit * 1000 - 100) );*/
 		
-		ArbreCouvrant method = new ArbreCouvrant(m_instance);
+		/*ArbreCouvrant method = new ArbreCouvrant(m_instance);
 		//PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
 		method.solve();
-		this.setSolution(method.getSolution());
+		this.setSolution(method.getSolution());*/
 		
 		/*AlgorithmeGlouton glouton = new AlgorithmeGlouton(m_instance);
 		glouton.solve();
@@ -100,9 +100,9 @@ public class TSPSolver {
 		genetique.solve();
 		this.setSolution(genetique.getSolution());*/
 		
-		/*LocalSearch localSearch = new LocalSearch(m_instance);
+		LocalSearch localSearch = new LocalSearch(m_instance);
 		localSearch.solve();
-		this.setSolution(localSearch.getSolution());*/
+		this.setSolution(localSearch.getSolution());
 		
 	}
 
