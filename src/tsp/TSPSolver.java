@@ -3,6 +3,7 @@ package tsp;
 import tsp.heuristic.AlgorithmeGenetique;
 import tsp.heuristic.AlgorithmeGlouton;
 import tsp.heuristic.ArbreCouvrant;
+import tsp.heuristic.LocalSearch;
 import tsp.heuristic.PlusProcheVoisin;
 
 /**
@@ -98,6 +99,10 @@ public class TSPSolver {
 		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
 		genetique.solve();
 		this.setSolution(genetique.getSolution());*/
+		
+		/*LocalSearch localSearch = new LocalSearch(m_instance);
+		localSearch.solve();
+		this.setSolution(localSearch.getSolution());*/
 		
 	}
 
