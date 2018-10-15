@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tsp.Instance;
-//hgtjrr
-public class Christofides extends AHeuristic{
+import tsp.Solution;
+import tsp.util.Couple;
 
+public class Christofides extends AHeuristic{
+	
+	List<Integer> villesMarquees = new ArrayList<Integer>();
+	
 	public Christofides(Instance instance) throws Exception {
 		super(instance, "Christofides");
 	}
@@ -20,9 +24,41 @@ public class Christofides extends AHeuristic{
 		}
 		return t;
 	}
+	public static List<List<Integer>> remove2(List<List<Integer>> l, int index, int point) {
+		List<List<Integer>> t = new ArrayList<List<Integer>>();
+		for(int i = 0; i < l.size(); i++) {
+			t.add(new ArrayList<Integer>());
+		}
+		int k = 0;
+		for(List<Integer> v : l) {
+			for(int e : v) {
+				if (k == index && e != point) {
+					t.get(index).add(e);
+				}else if (k != index) {
+					t.get(k).add(e);
+				}
+			}
+			k++;
+		}
+		return t;
+	}
+	public static List<List<Integer>> copy(List<List<Integer>> l) {
+		List<List<Integer>> t = new ArrayList<List<Integer>>();
+		for(int i = 0; i < l.size(); i++) {
+			t.add(new ArrayList<Integer>());
+		}
+		int k = 0;
+		for(List<Integer> v : l) {
+			for(int e : v) {
+				t.get(k).add(e);
+			}
+			k++;
+		}
+		return t;
+	}
 	
 	/*return un arbre de recouvrement de poids minimal, arbre.get(i) renvoie les sommets suivant du sommet i*/
-	public static List<List<Integer>> algoPrim(Instance instance) throws Exception{
+	public List<List<Integer>> algoPrim(Instance instance) throws Exception{
 		List<List<Integer>> arbre = new ArrayList<List<Integer>>();
 		for(int i = 0; i<instance.getNbCities(); i++) {
 			arbre.add(new ArrayList<Integer>());
@@ -54,7 +90,7 @@ public class Christofides extends AHeuristic{
 		return arbre;
 	}
 	
-	public static List<Integer> sommetsDeDegresImpairs(List<List<Integer>> arbre){
+	public List<Integer> sommetsDeDegresImpairs(List<List<Integer>> arbre){
 		List<Integer> degresImpairs = new ArrayList<Integer>();
 		int k = 0;
 		for(List<Integer> l : arbre) {
@@ -68,7 +104,7 @@ public class Christofides extends AHeuristic{
 	
 	/* return le graphe induit de l'ensemble des sommets de degré impair, 
 	 * prend en entrée un arbre de recouvrement de poids minimal*/
-	public static List<List<Integer>> grapheInduit(Instance instance, List<List<Integer>> arbre){
+	public List<List<Integer>> grapheInduit(Instance instance, List<List<Integer>> arbre){
 		List<Integer> degresImpairs = sommetsDeDegresImpairs(arbre);
 		List<List<Integer>> graphe = new ArrayList<List<Integer>>();
 		for(int i = 0; i<instance.getNbCities(); i++) {
@@ -87,7 +123,7 @@ public class Christofides extends AHeuristic{
 	
 	/*calcule deux liste L et R de sorte que G = (L,R) soit un graphe biparti (nécessaire pour le couplage parfait)
 	 * prend en entrée le graphe induit par l'ensemble des sommets de degre impair, et un arbre de recouvrement*/
-	public static List<List<Integer>> creationGrapheBiparti(Instance instance, List<List<Integer>> graphe, List<List<Integer>> arbre) throws Exception{
+	public List<List<Integer>> creationGrapheBiparti(Instance instance, List<List<Integer>> graphe, List<List<Integer>> arbre) throws Exception{
 		//List<List<Integer>> graphe = grapheInduit(instance, algoPrim(instance));
 		List<List<Integer>> biparti = new ArrayList<List<Integer>>();
 		biparti.add(new ArrayList<Integer>());
@@ -138,18 +174,22 @@ public class Christofides extends AHeuristic{
 		return biparti;
 	}
 	
-	public static List<List<Integer>> creationCouplageParfait(Instance instance, List<List<Integer>> biparti) throws Exception{
-		List<List<Integer>> couplage = new ArrayList<List<Integer>>();
+	/*algorithme hongrois*/
+	public List<Couple> creationCouplageParfait(Instance instance, List<List<Integer>> biparti) throws Exception{
+		List<Couple> couplage = new ArrayList<Couple>();
 		long[][] matrice = new long[biparti.get(0).size()][biparti.get(1).size()];
 		int nbLignes = biparti.get(0).size();
 		int nbColonnes = biparti.get(1).size();
+		
+		List<Couple> zeros = new ArrayList<Couple>();
 		//creation de la matrice
 		for(int i = 0; i < biparti.get(0).size(); i++) {
 			for(int j = 0; j < biparti.get(1).size(); j++) {
 				matrice[i][j] = instance.getDistances(biparti.get(0).get(i), biparti.get(1).get(j));
 			}
 		}
-		//On soustrait à chaque ligne le min de la ligne puis à chaque colonne le min de la colonne
+		/*On soustrait à chaque ligne le min de la ligne puis à chaque colonne le min de la colonne
+		 * ie reduction du tableau initial (etape 1)*/
 		for(int i = 0; i < nbLignes; i++) {
 			long min = matrice[i][0];
 			for(int j = 0; j < nbColonnes; j++) {
@@ -159,6 +199,9 @@ public class Christofides extends AHeuristic{
 			}
 			for(int j = 0; j < nbColonnes; j++) {
 				matrice[i][j] -= min;
+				if(matrice[i][j] == 0) {
+					zeros.add(new Couple(i,j));
+				}
 			}
 		}
 		for(int i = 0; i < nbColonnes; i++) {
@@ -170,17 +213,246 @@ public class Christofides extends AHeuristic{
 			}
 			for(int j = 0; j < nbLignes; j++) {
 				matrice[j][i] -= min;
+				if(matrice[j][i] == 0) {
+					zeros.add(new Couple(j,i));
+				}
 			}
 		}
-		//Puis on cherche une solution optimale
-		
+		/*Puis on cherche une solution optimale (etape 2)*/
+		List<Couple> zerosEncadres = new ArrayList<Couple>();
+		List<Couple> zerosBarres = new ArrayList<Couple>();
+		while (zerosEncadres.size() < nbLignes) {
+			//recreer zeros
+			if(zeros.size() == 0) {
+				for(int i = 0; i < nbLignes; i++) {
+					for(int j = 0; j < nbColonnes; j++) {
+						if(matrice[i][j] == 0) {
+							zeros.add(new Couple(i,j));
+						}
+					}
+				}
+			}
+			while(zeros.size() > 0) {
+				//On commence par chercher la ligne ayant le moins de zeros non barres et on encadre un zero 
+				//(le plus à gauche)
+				int ligneContenantLeMoinsDeZerosNonBarres = 0;
+				int[] nombreZerosNonBarres = new int[nbLignes];
+				List<List<Couple>> potentielZerosEncadres = new ArrayList<List<Couple>>();
+				for(int k = 0; k < nbLignes; k++) {
+					potentielZerosEncadres.add(new ArrayList<Couple>());
+				}
+				for(Couple c : zeros) {
+					nombreZerosNonBarres[c.getX()] += 1; //pas besoin de mettre de if car les zeros dans zeros sont forcement non barres ni encadres
+					potentielZerosEncadres.get(c.getX()).add(c);	
+				}
+				int min = nombreZerosNonBarres[0];
+				for(int i = 0; i < nombreZerosNonBarres.length; i++) {
+					if(nombreZerosNonBarres[i] < min) {
+						min = nombreZerosNonBarres[i];
+						ligneContenantLeMoinsDeZerosNonBarres = i;
+					}
+				}
+				Couple zeroCourant = potentielZerosEncadres.get(ligneContenantLeMoinsDeZerosNonBarres).get(0);
+				zerosEncadres.add(zeroCourant);
+				zeros.remove(zeroCourant);
+				List<Couple> temp = new ArrayList<Couple>();
+				for(Couple c : zeros) {
+					if (c.getX() == zeroCourant.getX() || c.getY() == zeroCourant.getY()) {
+						zerosBarres.add(c);
+						temp.add(c);
+					}
+				}
+				for(Couple c : temp) {
+					zeros.remove(c);
+				}
+			}
+			if(zerosEncadres.size() < nbLignes) {
+				/*etape 3*/
+				List<Integer> lignesMarquees = new ArrayList<Integer>();
+				List<Integer> colonnesMarquees = new ArrayList<Integer>();
+				boolean modif1 = true;
+				boolean modif2 = true;
+				for(int i = 0; i < nbLignes; i++) {
+					lignesMarquees.add(i);
+				}
+				for(Couple c : zerosEncadres) {
+					if (lignesMarquees.contains(c.getX())) {
+						lignesMarquees.remove(c.getX());
+					}
+				}
+				while(modif1 || modif2) {
+					modif1 = true;
+					modif2 = true;
+					for(Couple c : zerosBarres) {
+						if(lignesMarquees.contains(c.getX()) 
+								&& !colonnesMarquees.contains(c.getY())) {
+							colonnesMarquees.add(c.getY());
+						}else {
+							modif1 = false;
+						}
+					}
+					for(Couple c : zerosEncadres) {
+						if(colonnesMarquees.contains(c.getY()) && !lignesMarquees.contains(c.getX())) {
+							lignesMarquees.add(c.getX());
+						}else {
+							modif2 = false;
+						}
+					}
+				}
+				zerosEncadres.clear();
+				zerosBarres.clear();
+				List<Integer> lignesNonMarquees = new ArrayList<Integer>();
+				for(int i = 0; i < nbLignes; i++) {
+					lignesNonMarquees.add(i);
+				}
+				for(int k : lignesMarquees) {
+					lignesNonMarquees.remove(k);
+				}
+				
+				int[][] sousMatrice = new int[nbLignes][nbColonnes];
+				int barre = 1;
+				int etoile = 2;
+				for(int i = 0; i < nbLignes; i++) {
+					for(int j = 0; j < nbColonnes; j++) {
+						if (lignesNonMarquees.contains(i) && colonnesMarquees.contains(j)) {
+							sousMatrice[i][j] = etoile;
+						}else if(lignesNonMarquees.contains(i) || colonnesMarquees.contains(j)) {
+							sousMatrice[i][j] = barre;
+						}else {
+							sousMatrice[i][j] = 0;
+						}
+					}
+				}
+				
+				int i = 0;
+				int j = 0;
+				while(sousMatrice[i][j] != 0) {
+					if(j == nbColonnes - 1) {
+						j = 0;
+						i += 1;
+					}else{
+						j += 1;
+					}
+				}
+				long min = matrice[i][j];
+				for(int k = 0; k < nbLignes; k++) {
+					for(int l = 0; l < nbColonnes; l++) {
+						if (sousMatrice[k][l] == 0 && matrice[k][l] < min) {
+							min = matrice[k][l];
+						}
+					}
+				}
+				for(int k = 0; k < nbLignes; k++) {
+					for(int l = 0; l < nbColonnes; l++) {
+						if (sousMatrice[k][l] == 0) {
+							matrice[k][l] -= min;
+						}else if (sousMatrice[k][l] == etoile) {
+							matrice[k][l] += min;
+						}else {
+							
+						}
+					}
+				}
+				
+			}
+		}
+		for(Couple c : zerosEncadres) {
+			couplage.add(new Couple(biparti.get(0).get(c.getX()), biparti.get(1).get(c.getY())));
+		}
 		return couplage;
+	}
+	
+	public List<List<Integer>> union(List<List<Integer>> arbre, List<Couple> couplage){
+		List<List<Integer>> graphe = arbre;
+		for(Couple c : couplage) {
+			if(!graphe.get(c.getX()).contains(c.getY())) {
+				graphe.get(c.getX()).add(c.getY());
+				graphe.get(c.getY()).add(c.getX());
+			}
+		}
+		return graphe;
+	}
+	
+	public boolean isEmpty1(List<List<Integer>> G) {
+		for(List<Integer> l : G) {
+			if(!l.isEmpty()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	/*renvoie true si contient toutes les villes*/
+	public boolean contient(Instance instance, List<Integer> villes) {
+		for(int i = 0; i < instance.getNbCities(); i++) {
+			if(!villes.contains(i)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	public void explorer(List<List<Integer>> arbre, int villeVisitee) throws Exception {
+		this.villesMarquees.add(villeVisitee);
+		System.out.println(villeVisitee);
+		for(int villeFils : arbre.get(villeVisitee)) {
+			if(!(this.villesMarquees.contains(villeFils))) {
+				explorer(arbre, villeFils);
+			}
+		}
+	}
+	public List<Integer> tourEulerien(Instance instance, List<List<Integer>> G) throws Exception{
+		List<Integer> chemin = new ArrayList<Integer>();
+		List<List<Integer>> graphe = G;
+		List<List<Integer>> copyGraphe = copy(G);
+		int x = 0;
+		chemin.add(x);
+		while(!isEmpty1(graphe)) {
+			for(int y : graphe.get(x)) {
+				this.villesMarquees.clear();
+				copyGraphe = remove2(copyGraphe, x, y);
+				copyGraphe = remove2(copyGraphe, y, x);
+				explorer(copyGraphe, y);
+				copyGraphe.get(x).add(y);
+				copyGraphe.get(y).add(x);
+				if(contient(instance, this.villesMarquees)) {
+					graphe = remove2(graphe, x, y);
+					graphe = remove2(graphe, y, x);
+					copyGraphe = remove2(copyGraphe, x, y);
+					copyGraphe = remove2(copyGraphe, y, x);
+					chemin.add(y);
+					x = y;
+					break;
+				}
+			}
+		}
+		return chemin;
+	}
+	
+	public List<Integer> supprimerDoublons(List<Integer> l){
+		List<Integer> sansDoublons = new ArrayList<Integer>();
+		for(int e : l) {
+			if(!sansDoublons.contains(e)) {
+				sansDoublons.add(e);
+			}
+		}
+		sansDoublons.add(sansDoublons.get(0));
+		return sansDoublons;
 	}
 	
 	@Override
 	public void solve() throws Exception {
-		
-		
+		List<List<Integer>> arbre = algoPrim(this.m_instance);
+		List<List<Integer>> graphe = grapheInduit(this.m_instance, arbre);
+		List<List<Integer>> biparti = creationGrapheBiparti(this.m_instance, graphe, arbre);
+		List<Couple> couplage = creationCouplageParfait(this.m_instance, biparti);
+		List<List<Integer>> union = union(arbre, couplage);
+		List<Integer> tour = tourEulerien(this.m_instance, union);
+		List<Integer> solution = supprimerDoublons(tour);
+		Solution sol = new Solution(this.m_instance);
+		int k = 0;
+		for(int i : solution) {
+			sol.setCityPosition(i, k);
+			k++;
+		}
+		this.m_solution = sol;
 	}
-
 }
