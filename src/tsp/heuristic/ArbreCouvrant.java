@@ -76,7 +76,7 @@ public class ArbreCouvrant extends AHeuristic{
 		int debut = 4; //faire boucle for sur la ville de depart 'debut'
 		explorer(arbre, debut);
 		Solution sol = new Solution(this.m_instance);
-		int k = 0; 	 	 	  		  		   	 	
+		int k = 0;
 		for(int i : this.villesMarquees) { 	 	 	  		  		   	 	
 			sol.setCityPosition(i, k); 	 	 	  		  		   	 	
 			k++; 	 	 	  		  		   	 	
