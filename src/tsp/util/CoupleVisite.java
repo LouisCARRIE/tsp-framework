@@ -6,6 +6,7 @@ public class CoupleVisite {
 	public CoupleVisite() {
 		this(0, false);
 	}
+	
 	public CoupleVisite(double phero, boolean b) {
 		this.phero = phero;
 		this.b = b;
