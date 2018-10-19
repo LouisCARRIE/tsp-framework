@@ -88,10 +88,15 @@ public class TSPSolver {
 			spentTime = System.currentTimeMillis() - startTime;
 		}while(spentTime < (m_timeLimit * 1000 - 100) );*/
 		
+		
+		
 		/*ArbreCouvrant method = new ArbreCouvrant(m_instance);
-		//PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
 		method.solve();
 		this.setSolution(method.getSolution());*/
+
+		PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
+		method.solve();
+		this.setSolution(method.getSolution());
 		
 		/*AlgorithmeGlouton glouton = new AlgorithmeGlouton(m_instance);
 		glouton.solve();
@@ -105,9 +110,9 @@ public class TSPSolver {
 		localSearch.solve();
 		this.setSolution(localSearch.getSolution());*/
 		
-		Christofides Christofides = new Christofides(m_instance);
+		/*Christofides Christofides = new Christofides(m_instance);
 		Christofides.solve();
-		this.setSolution(Christofides.getSolution());
+		this.setSolution(Christofides.getSolution());*/
 		
 	}
 

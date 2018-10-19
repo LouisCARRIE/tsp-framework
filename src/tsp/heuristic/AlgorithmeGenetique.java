@@ -118,17 +118,29 @@ public class AlgorithmeGenetique extends AHeuristic {
 	}
 	
 	
+	
+	public double evaluatePopulationenproportioncumulee(int[][] population) throws Exception {
+		double[] performancesenproportion = evaluateIndividuenproportion(population);
+		double performanceenproportioncumulee = 0;
+		for (int i=0 ; i<population.length ; i++) {
+			//performances[i] = evaluateIndividu(population[i])/performancecumulee;
+			performanceenproportioncumulee = performanceenproportioncumulee + performancesenproportion[i]; 
+		}
+		return performanceenproportioncumulee;
+	}
+	
+	
+	
 	//(a revoir (si on genere une pop de 100.000 ne fonctionne pas ?))
 	public int[][] selectionIndividus(int[][] population) throws Exception {
 		//processus de la "roulette wheel selection"
 		//performance : la performance d'un individu
-		
 		double[] performances = evaluateIndividuenproportion(population);
 		int[][] nouvellepopulation = new int[population.length][1];
 		
-		
+		System.out.println("somme en proportion " + evaluatePopulationenproportioncumulee(population));
 		for (int j=0 ; j<population.length ; j++) {
-			double r = Math.random(); //r entre 0 inclus et 1 exclus --> il faut les 2 inclus !!
+			double r = Math.random()*evaluatePopulationenproportioncumulee(population); //r entre 0 inclus et 1 exclus --> il faut les 2 inclus !!
 			int indiceIndividuSelectionne = 0;
 			double t = performances[0];
 			while (t<r) {
@@ -270,7 +282,7 @@ public class AlgorithmeGenetique extends AHeuristic {
 		
 		
 		int[][] population;
-		population = genererPopulation(20);
+		population = genererPopulation(1000);
 		population = selectionIndividus(population);
 
 		//population = hybridation(population);
