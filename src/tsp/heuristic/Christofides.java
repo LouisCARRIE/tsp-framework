@@ -130,7 +130,8 @@ public class Christofides extends AHeuristic{
 		biparti.add(new ArrayList<Integer>());
 		List<Integer> villesMarquees = new ArrayList<Integer>();
 		List<Integer> villesAChoisir = sommetsDeDegresImpairs(arbre);
-		while (villesMarquees.size() < graphe.size()) {
+		int n = villesAChoisir.size();
+		while (villesMarquees.size() < n) {
 			long distance = instance.getDistances(villesAChoisir.get(0), villesAChoisir.get(1));
 			int imin = villesAChoisir.get(0);
 			int jmin = villesAChoisir.get(1);
@@ -173,7 +174,54 @@ public class Christofides extends AHeuristic{
 		}
 		return biparti;
 	}
-	
+	public List<List<Integer>> creationGrapheBiparti1(Instance instance, List<List<Integer>> graphe, List<List<Integer>> arbre) throws Exception{
+		//List<List<Integer>> graphe = grapheInduit(instance, algoPrim(instance));
+		List<List<Integer>> biparti = new ArrayList<List<Integer>>();
+		biparti.add(new ArrayList<Integer>());
+		biparti.add(new ArrayList<Integer>());
+		List<Integer> villesMarquees = new ArrayList<Integer>();
+		List<Integer> villesAChoisir = sommetsDeDegresImpairs(arbre);
+		int n = villesAChoisir.size();
+		for (int i : villesAChoisir) {
+			boolean voisin1 = false;
+			boolean voisin0 = false;
+			for(int j : biparti.get(0)) {
+				if(arbre.get(i).contains(j)) {
+					voisin0 = true;
+					break;
+				}
+			}
+			for(int j : biparti.get(1)) {
+				if(arbre.get(i).contains(j)) {
+					voisin1 = true;
+					break;
+				}
+			}
+			if(voisin0) {
+				biparti.get(0).add(i);
+			}else if(voisin1) {
+				biparti.get(1).add(i);
+			}else {
+				if(biparti.get(0).size() < biparti.get(1).size()) {
+					biparti.get(0).add(i);
+				}else {
+					biparti.get(1).add(i);
+				}
+			}
+		}
+		while(biparti.get(0).size() != biparti.get(1).size()) {
+			if(biparti.get(0).size() < biparti.get(1).size()) {
+				int x = biparti.get(1).get(0);
+				biparti.get(1).remove(0);
+				biparti.get(0).add(x);
+			}else {
+				int x = biparti.get(0).get(0);
+				biparti.get(0).remove(0);
+				biparti.get(1).add(x);
+			}
+		}
+		return biparti;
+	}
 	/*algorithme hongrois*/
 	public List<Couple> creationCouplageParfait(Instance instance, List<List<Integer>> biparti) throws Exception{
 		List<Couple> couplage = new ArrayList<Couple>();
@@ -188,6 +236,7 @@ public class Christofides extends AHeuristic{
 				matrice[i][j] = instance.getDistances(biparti.get(0).get(i), biparti.get(1).get(j));
 			}
 		}
+		
 		/*On soustrait à chaque ligne le min de la ligne puis à chaque colonne le min de la colonne
 		 * ie reduction du tableau initial (etape 1)*/
 		for(int i = 0; i < nbLignes; i++) {
@@ -213,11 +262,12 @@ public class Christofides extends AHeuristic{
 			}
 			for(int j = 0; j < nbLignes; j++) {
 				matrice[j][i] -= min;
-				if(matrice[j][i] == 0) {
+				if(matrice[j][i] == 0 && !zeros.contains(new Couple(j,i))) {
 					zeros.add(new Couple(j,i));
 				}
 			}
 		}
+		
 		/*Puis on cherche une solution optimale (etape 2)*/
 		List<Couple> zerosEncadres = new ArrayList<Couple>();
 		List<Couple> zerosBarres = new ArrayList<Couple>();
@@ -245,13 +295,18 @@ public class Christofides extends AHeuristic{
 					nombreZerosNonBarres[c.getX()] += 1; //pas besoin de mettre de if car les zeros dans zeros sont forcement non barres ni encadres
 					potentielZerosEncadres.get(c.getX()).add(c);	
 				}
-				int min = nombreZerosNonBarres[0];
+				int min = nombreZerosNonBarres[0] + 1;
+				for(int i = 1; i < nombreZerosNonBarres.length; i++) {
+					min += nombreZerosNonBarres[i];
+				}
 				for(int i = 0; i < nombreZerosNonBarres.length; i++) {
-					if(nombreZerosNonBarres[i] < min) {
+					if(nombreZerosNonBarres[i] < min && nombreZerosNonBarres[i] != 0) {//attention modif
 						min = nombreZerosNonBarres[i];
 						ligneContenantLeMoinsDeZerosNonBarres = i;
 					}
 				}
+				
+				
 				Couple zeroCourant = potentielZerosEncadres.get(ligneContenantLeMoinsDeZerosNonBarres).get(0);
 				zerosEncadres.add(zeroCourant);
 				zeros.remove(zeroCourant);
@@ -265,6 +320,7 @@ public class Christofides extends AHeuristic{
 				for(Couple c : temp) {
 					zeros.remove(c);
 				}
+				
 			}
 			if(zerosEncadres.size() < nbLignes) {
 				/*etape 3*/
@@ -277,7 +333,7 @@ public class Christofides extends AHeuristic{
 				}
 				for(Couple c : zerosEncadres) {
 					if (lignesMarquees.contains(c.getX())) {
-						lignesMarquees.remove(c.getX());
+						lignesMarquees = remove1(lignesMarquees, c.getX());
 					}
 				}
 				while(modif1 || modif2) {
@@ -392,7 +448,6 @@ public class Christofides extends AHeuristic{
 	}
 	public void explorer(List<List<Integer>> arbre, int villeVisitee) throws Exception {
 		this.villesMarquees.add(villeVisitee);
-		System.out.println(villeVisitee);
 		for(int villeFils : arbre.get(villeVisitee)) {
 			if(!(this.villesMarquees.contains(villeFils))) {
 				explorer(arbre, villeFils);
@@ -405,7 +460,8 @@ public class Christofides extends AHeuristic{
 		List<List<Integer>> copyGraphe = copy(G);
 		int x = 0;
 		chemin.add(x);
-		while(!isEmpty1(graphe)) {
+		while(!isEmpty1(graphe)) { //il faudrait tester avant si le graphe est eulerien, si il ne l'est pas modifier biparti
+			
 			for(int y : graphe.get(x)) {
 				this.villesMarquees.clear();
 				copyGraphe = remove2(copyGraphe, x, y);
@@ -413,6 +469,7 @@ public class Christofides extends AHeuristic{
 				explorer(copyGraphe, y);
 				copyGraphe.get(x).add(y);
 				copyGraphe.get(y).add(x);
+				
 				if(contient(instance, this.villesMarquees)) {
 					graphe = remove2(graphe, x, y);
 					graphe = remove2(graphe, y, x);
@@ -442,8 +499,15 @@ public class Christofides extends AHeuristic{
 	public void solve() throws Exception {
 		List<List<Integer>> arbre = algoPrim(this.m_instance);
 		List<List<Integer>> graphe = grapheInduit(this.m_instance, arbre);
-		List<List<Integer>> biparti = creationGrapheBiparti(this.m_instance, graphe, arbre);
+		List<List<Integer>> biparti = creationGrapheBiparti1(this.m_instance, graphe, arbre);
+
 		List<Couple> couplage = creationCouplageParfait(this.m_instance, biparti);
+		/*System.out.println(couplage.get(0).getX());
+		System.out.println(couplage.get(0).getY());
+		System.out.println(couplage.get(1).getX());
+		System.out.println(couplage.get(1).getY());
+		System.out.println(couplage.get(2).getX());
+		System.out.println(couplage.get(2).getY());*/
 		List<List<Integer>> union = union(arbre, couplage);
 		List<Integer> tour = tourEulerien(this.m_instance, union);
 		List<Integer> solution = supprimerDoublons(tour);
