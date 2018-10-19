@@ -3,6 +3,7 @@ package tsp;
 import tsp.heuristic.AlgorithmeGenetique;
 import tsp.heuristic.AlgorithmeGlouton;
 import tsp.heuristic.ArbreCouvrant;
+import tsp.heuristic.Christofides;
 import tsp.heuristic.LocalSearch;
 import tsp.heuristic.PlusProcheVoisin;
 
@@ -103,6 +104,10 @@ public class TSPSolver {
 		/*LocalSearch localSearch = new LocalSearch(m_instance);
 		localSearch.solve();
 		this.setSolution(localSearch.getSolution());*/
+		
+		Christofides Christofides = new Christofides(m_instance);
+		Christofides.solve();
+		this.setSolution(Christofides.getSolution());
 		
 	}
 
