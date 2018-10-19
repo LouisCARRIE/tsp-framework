@@ -111,7 +111,8 @@ public class AlgorithmeGenetique extends AHeuristic {
 		double[] performances = new double[population.length];
 		double performancecumulee = evaluatePopulation(population);
 		for (int i=0 ; i<population.length ; i++) {
-			performances[i] = evaluateIndividu(population[i])/performancecumulee; 
+			//performances[i] = evaluateIndividu(population[i])/performancecumulee;
+			performances[i] = performancecumulee/evaluateIndividu(population[i]);
 		}
 		return performances;
 	}
@@ -205,6 +206,7 @@ public class AlgorithmeGenetique extends AHeuristic {
 					if (!(v2>=tranchemin&&v2<j)) {
 						echangerVilles2(enfant2, parent2[j], parent1[j]);
 					}
+					
 				}
 			} else {
 				enfant1 = parent1;

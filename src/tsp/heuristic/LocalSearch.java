@@ -52,12 +52,10 @@ public class LocalSearch extends AHeuristic {
 		//on choisit un voisinage par inversion de couples d'indices
 		List<int[]> voisinage = new ArrayList<int[]>();
 		for (int i=1 ; i<individu.length-1 ; i++) {
-			for (int j=1 ; j<individu.length-1 ; j++) {
-				if (j!=i) {
+			for (int j=i+1 ; j<individu.length-1 ; j++) {
 					int[] voisin = copyOf(individu);
 					echangerVilles(voisin, i, j);
 					voisinage.add(voisin);
-				}
 			}
 		}
 		return voisinage;
@@ -84,10 +82,9 @@ public class LocalSearch extends AHeuristic {
 	}
 	
 	
-	public int[] localSearch() throws Exception {
-		//localSearch échange i et j
-		int[] individu = genererIndividu();
+	public int[] localSearch(int[] individu) throws Exception {
 		double delta = Double.MAX_VALUE;
+		//for (int i = 0 ; i<10 ; i++) {
 		while (delta>0) {
 			int[] voisin = meilleureSolutionVoisinage(genererVoisinage(individu));
 			delta = evaluateIndividu(individu) - evaluateIndividu(voisin);
@@ -105,7 +102,7 @@ public class LocalSearch extends AHeuristic {
 	//dans la méthode localSearch remplacer la boucle while par un fort ?
 	public void solve() throws Exception {
 		int[] individu = genererIndividu();
-		individu = localSearch();
+		individu = localSearch(individu);
 		Solution s = new Solution(m_instance);
 		for (int i = 0; i<individu.length ; i++) {
 			s.setCityPosition(individu[i], i);

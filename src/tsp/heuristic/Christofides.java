@@ -64,7 +64,7 @@ public class Christofides extends AHeuristic{
 			arbre.add(new ArrayList<Integer>());
 		}
 		List<Integer> villesMarquees = new ArrayList<Integer>();
-		villesMarquees.add(0); //On commence à construire notre arbre depuis la ville 0.
+		villesMarquees.add(0); //On commence ‡ construire notre arbre depuis la ville 0.
 		List<Integer> villesATraitees = new ArrayList<Integer>();
 		for(int i = 1; i<instance.getNbCities(); i++) {
 			villesATraitees.add(i);
@@ -102,8 +102,8 @@ public class Christofides extends AHeuristic{
 		return degresImpairs;
 	}
 	
-	/* return le graphe induit de l'ensemble des sommets de degré impair, 
-	 * prend en entrée un arbre de recouvrement de poids minimal*/
+	/* return le graphe induit de l'ensemble des sommets de degrÈ impair, 
+	 * prend en entrÈe un arbre de recouvrement de poids minimal*/
 	public List<List<Integer>> grapheInduit(Instance instance, List<List<Integer>> arbre){
 		List<Integer> degresImpairs = sommetsDeDegresImpairs(arbre);
 		List<List<Integer>> graphe = new ArrayList<List<Integer>>();
@@ -121,8 +121,8 @@ public class Christofides extends AHeuristic{
 		return graphe;
 	}
 	
-	/*calcule deux liste L et R de sorte que G = (L,R) soit un graphe biparti (nécessaire pour le couplage parfait)
-	 * prend en entrée le graphe induit par l'ensemble des sommets de degre impair, et un arbre de recouvrement*/
+	/*calcule deux liste L et R de sorte que G = (L,R) soit un graphe biparti (nÈcessaire pour le couplage parfait)
+	 * prend en entrÈe le graphe induit par l'ensemble des sommets de degre impair, et un arbre de recouvrement*/
 	public List<List<Integer>> creationGrapheBiparti(Instance instance, List<List<Integer>> graphe, List<List<Integer>> arbre) throws Exception{
 		//List<List<Integer>> graphe = grapheInduit(instance, algoPrim(instance));
 		List<List<Integer>> biparti = new ArrayList<List<Integer>>();
@@ -238,6 +238,8 @@ public class Christofides extends AHeuristic{
 		}
 		
 		/*On soustrait à chaque ligne le min de la ligne puis à chaque colonne le min de la colonne
+
+		/*On soustrait à chaque ligne le min de la ligne puis à chaque colonne le min de la colonne
 		 * ie reduction du tableau initial (etape 1)*/
 		for(int i = 0; i < nbLignes; i++) {
 			long min = matrice[i][0];
@@ -284,7 +286,7 @@ public class Christofides extends AHeuristic{
 			}
 			while(zeros.size() > 0) {
 				//On commence par chercher la ligne ayant le moins de zeros non barres et on encadre un zero 
-				//(le plus à gauche)
+				//(le plus ‡ gauche)
 				int ligneContenantLeMoinsDeZerosNonBarres = 0;
 				int[] nombreZerosNonBarres = new int[nbLignes];
 				List<List<Couple>> potentielZerosEncadres = new ArrayList<List<Couple>>();
