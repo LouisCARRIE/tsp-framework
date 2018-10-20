@@ -4,6 +4,8 @@ import tsp.Instance;
 import tsp.Solution;
 
 public class AlgorithmeGenetique extends AHeuristic {
+	
+	//JAutoDoc
 
 	public AlgorithmeGenetique(Instance instance) throws Exception {
 		super(instance, "AlgorithmeGenetique");
