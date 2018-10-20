@@ -188,48 +188,28 @@ public class AlgorithmeGenetique extends AHeuristic {
 	}
 	
 	
-	//a revoir ; static ou pas ?
-	public static int[][] hybridation(int[][] population) throws Exception {
-		double probahybridation = 0.66;
+	public static int[][] crossingOver(int[][] population) throws Exception {
+		
+		double probadhybridation = 0.66;
 		int n = population[0].length;
 		for (int i=0 ; i<population.length-1 ; i+=2) {
-			System.out.println("i vaut " + i);
-			int[] parent1 = population[i];
-			int[] parent2 = population[i+1];
-			int[] enfant1;
-			int[] enfant2;
+			
 			double r = Math.random(); //r entre 0 inclus et 1 exclus --> il faut les 2 inclus !!
-			System.out.println("le nombre tire au hasard vaut " + r);
-			if (r<=probahybridation) {
-				enfant1 = parent1;
-				enfant2 = parent2;
-				int a = 1 + (int) (Math.random()*(n-2));
-				int b = 1 + (int) (Math.random()*(n-2));
-				int tranchemin = Math.min(a, b);
-				System.out.println("tranchemin vaut " + tranchemin);
-				int tranchemax = Math.max(a, b);
-				System.out.println("tranchemax vaut " + tranchemax);
-				for (int j=tranchemin ; j<=tranchemax ; j++) {
-					int v1 = trouverVille(enfant1, parent1[j]);
-					if (!(v1>=tranchemin&&v1<j)) {
-						echangerVilles2(enfant1, parent1[j], parent2[j]);
-					}
-					int v2 = trouverVille(enfant2, parent2[j]);
-					if (!(v2>=tranchemin&&v2<j)) {
-						echangerVilles2(enfant2, parent2[j], parent1[j]);
-					}
-					
+			
+			if (r<=probadhybridation) {
+				
+				for (int j=1 ; j<=5 ; j++) {
+					int a = 1 + (int) (Math.random()*(n-3));
+					echangerVilles(population[i], a, a+1);
+					int b = 1 + (int) (Math.random()*(n-3));
+					echangerVilles(population[i+1], b, b+1);
 				}
-			} else {
-				enfant1 = parent1;
-				enfant2 = parent2;	
+					
 			}
-			population[i] = enfant1;
-			population[i+1] = enfant2;
 			
 		}
+
 		return population;
-		
 	}
 	
 	
@@ -283,12 +263,13 @@ public class AlgorithmeGenetique extends AHeuristic {
 		
 		int[][] population;
 		population = genererPopulation(1000);
-		population = selectionIndividus(population);
-
-		//population = hybridation(population);
-		//System.out.println("la population hybridee est " + toString2(population));
 		
-		mutationPopulation(population);
+		for (int i=0 ; i<100 ; i++) {
+			population = selectionIndividus(population);
+			population = crossingOver(population);
+			mutationPopulation(population);
+		}
+		
 		int[] meilleurIndividu = meilleurIndividu(population);
 		Solution s = new Solution(m_instance);
 		for (int i = 0; i<meilleurIndividu.length ; i++) {
