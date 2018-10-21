@@ -264,12 +264,13 @@ public class AlgorithmeGenetique extends AHeuristic {
 		
 		
 		int[][] population;
-		population = genererPopulation(50);
+		//population = genererPopulation(150);
+		population = genererPopulationSemiAleatoirement(150);
 		
-		for (int i=0 ; i<10000 ; i++) {
+		for (int i=0 ; i<1000; i++) {
 			int [][] selectionSousEnsemblePopulation = selectionSousEnsemblePopulation(population);
 			int [][] populationEnfant = crossOver(selectionSousEnsemblePopulation);
-			mutationPopulationEnfant(populationEnfant);
+			mutationPopulationEnfant2opt(populationEnfant);
 			nouvellePopulation(population, populationEnfant);
 			
 		}
@@ -299,6 +300,21 @@ public class AlgorithmeGenetique extends AHeuristic {
 	}
 	
 	
+	public int[] genererIndividuSemiAleatoirement() throws Exception {
+		int[] individu = new int[this.m_instance.getNbCities() + 1];
+		for (int i = 1 ; i<this.m_instance.getNbCities() ; i++) {
+			individu[i] = i;
+		}
+		int c1 = 1 + (int) (Math.random()*(individu.length-2));
+		int c2;
+		do {
+			c2 = 1 + (int) (Math.random()*(individu.length-2));
+		} while ((c1==c2)||(c1==(c2+1))||(c2==(c1+1)));
+		return copyOrdreDifferent(individu, c1, c2);
+		
+	}
+	
+	
 	public int[][] genererPopulation(int n) throws Exception {
 		//n = taille de la population ; n>=log(l) avec l la taille d'un invididu
 		//attention : nombre d'individus pair ?
@@ -308,11 +324,21 @@ public class AlgorithmeGenetique extends AHeuristic {
 		}
 		return population;
 	}
+	
+	public int[][] genererPopulationSemiAleatoirement(int n) throws Exception {
+		//n = taille de la population ; n>=log(l) avec l la taille d'un invididu
+		//attention : nombre d'individus pair ?
+		int[][] population = new int[n][1];
+		for (int i=0 ; i<n ; i++) {
+			population[i] = genererIndividuSemiAleatoirement();
+		}
+		return population;
+	}
 
 	
 	public int[][] selectionSousEnsemblePopulation(int[][] population) throws Exception {
 		//selection par tournoi
-		int m = 40; //m pair !
+		int m = 30; //m pair !
 		int[][] selectionSousEnsemblePopulation = new int[m][1];
 		for (int i=0 ; i<m ; i++) {
 			int[] competiteur1 = individuAuHasard(population);
@@ -360,11 +386,32 @@ public class AlgorithmeGenetique extends AHeuristic {
 	}
 	
 	
+	public static int[] mutationIndividu2opt(int[] individu) throws Exception {
+		//methode "2 opt"
+		int c1 = 1 + (int) (Math.random()*(individu.length-2));
+		int c2;
+		do {
+			c2 = 1 + (int) (Math.random()*(individu.length-2));
+		} while ((c1==c2)||(c1==(c2+1))||(c2==(c1+1)));
+		return copyOrdreDifferent(individu, c1, c2);
+	}
+	
+	
 	public static void mutationPopulationEnfant(int[][] populationenfant) throws Exception {
 		for (int i=0 ; i<populationenfant.length ; i++) {
 			double r = Math.random();
 			if (r<0.2) {
 				mutationIndividu(populationenfant[i]);
+			}
+		}
+	}
+	
+	
+	public static void mutationPopulationEnfant2opt(int[][] populationEnfant) throws Exception {
+		for(int i=0 ; i<populationEnfant.length ; i++) {
+			double r = Math.random();
+			if (r<0.2) {
+				populationEnfant[i] = mutationIndividu2opt(populationEnfant[i]);
 			}
 		}
 	}
@@ -501,6 +548,31 @@ public class AlgorithmeGenetique extends AHeuristic {
 		}
 		return i<individu.length;
 
+	}
+	
+	public static int[] copyOrdreDifferent(int[] individu, int c1, int c2) throws Exception {
+		if ((c1<=0)||(c1>=(individu.length-1))||(c2<=0)||(c2>=(individu.length-1))||(c1==c2)||(c1==(c2+1))||(c2==(c1+1))) {
+			throw new Exception("les indices sont non valides");
+		} else {
+			int min = Math.min(c1, c2);
+			int max = Math.max(c1, c2);
+			int[] copyOrdreDifferent = new int[individu.length];
+			for (int i=1 ; i<=min ; i++) {
+				copyOrdreDifferent[i] = individu[i];
+			}
+			for (int i=max ; i<individu.length-1 ; i++) {
+				copyOrdreDifferent[i] = individu[i];
+			}
+			int j = 1;
+			for (int i=min + 1 ; i<=(min+1 + max-1)/2 ; i++) {
+				copyOrdreDifferent[i] = individu[max-j];
+				copyOrdreDifferent[max-j] = individu[i];
+				j++;
+				
+			}
+			
+			return copyOrdreDifferent;
+		}
 	}
 	
 
