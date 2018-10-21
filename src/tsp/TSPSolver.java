@@ -98,6 +98,7 @@ public class TSPSolver {
 		method.solve();
 		this.setSolution(method.getSolution());
 		
+		
 		/*AlgorithmeGlouton glouton = new AlgorithmeGlouton(m_instance);
 		glouton.solve();
 		this.setSolution(glouton.getSolution());*/

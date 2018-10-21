@@ -263,6 +263,7 @@ public class AlgorithmeGenetique extends AHeuristic {
 		}*/
 		
 		
+		
 		int[][] population;
 		//population = genererPopulation(150);
 		population = genererPopulationSemiAleatoirement(150);
