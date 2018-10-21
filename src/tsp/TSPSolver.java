@@ -94,18 +94,18 @@ public class TSPSolver {
 		method.solve();
 		this.setSolution(method.getSolution());*/
 
-		/*PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
+		PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
 		method.solve();
-		this.setSolution(method.getSolution());*/
+		this.setSolution(method.getSolution());
 		
 		
 		/*AlgorithmeGlouton glouton = new AlgorithmeGlouton(m_instance);
 		glouton.solve();
 		this.setSolution(glouton.getSolution());*/
 		
-		AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
+		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
 		genetique.solve();
-		this.setSolution(genetique.getSolution());
+		this.setSolution(genetique.getSolution());*/
 
 		/*LocalSearch localSearch = new LocalSearch(m_instance);
 		localSearch.solve();

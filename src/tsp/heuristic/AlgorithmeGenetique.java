@@ -265,8 +265,8 @@ public class AlgorithmeGenetique extends AHeuristic {
 		
 		
 		int[][] population;
-		//population = genererPopulation(150);
-		population = genererPopulationSemiAleatoirement(20);
+		population = genererPopulation(20);
+		//population = genererPopulationSemiAleatoirement(20);
 		
 		for (int i=0 ; i<100000; i++) {
 			int [][] selectionSousEnsemblePopulation = selectionSousEnsemblePopulation(population);
@@ -358,7 +358,7 @@ public class AlgorithmeGenetique extends AHeuristic {
 	
 	public int[][] selectionSousEnsemblePopulation(int[][] population) throws Exception {
 		//selection par tournoi
-		int m = 8; //m pair !
+		int m = 10; //m pair !
 		int[][] selectionSousEnsemblePopulation = new int[m][1];
 		for (int i=0 ; i<m ; i++) {
 			int[] competiteur1 = individuAuHasard(population);
