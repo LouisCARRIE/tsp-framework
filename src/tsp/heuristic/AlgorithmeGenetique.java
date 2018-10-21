@@ -266,9 +266,9 @@ public class AlgorithmeGenetique extends AHeuristic {
 		
 		int[][] population;
 		//population = genererPopulation(150);
-		population = genererPopulationSemiAleatoirement(150);
+		population = genererPopulationSemiAleatoirement(20);
 		
-		for (int i=0 ; i<1000; i++) {
+		for (int i=0 ; i<100000; i++) {
 			int [][] selectionSousEnsemblePopulation = selectionSousEnsemblePopulation(population);
 			int [][] populationEnfant = crossOver(selectionSousEnsemblePopulation);
 			mutationPopulationEnfant2opt(populationEnfant);
@@ -285,7 +285,7 @@ public class AlgorithmeGenetique extends AHeuristic {
 		
 	}
 	
-	
+	//partir de indiv = plusProcheVoisin puis faire les modifications
 	public int[] genererIndividu() throws Exception {
 		//génère aléatoirement un chemin 
 		int[] individu = new int[this.m_instance.getNbCities() + 1];
@@ -301,7 +301,7 @@ public class AlgorithmeGenetique extends AHeuristic {
 	}
 	
 	
-	public int[] genererIndividuSemiAleatoirement() throws Exception {
+	/*public int[] genererIndividuSemiAleatoirement() throws Exception {
 		int[] individu = new int[this.m_instance.getNbCities() + 1];
 		for (int i = 1 ; i<this.m_instance.getNbCities() ; i++) {
 			individu[i] = i;
@@ -312,6 +312,25 @@ public class AlgorithmeGenetique extends AHeuristic {
 			c2 = 1 + (int) (Math.random()*(individu.length-2));
 		} while ((c1==c2)||(c1==(c2+1))||(c2==(c1+1)));
 		return copyOrdreDifferent(individu, c1, c2);
+		
+	}*/
+	
+	public int[] genererIndividuSemiAleatoirement() throws Exception {
+		int[] individu = new int[this.m_instance.getNbCities() + 1];
+		for (int i = 1 ; i<this.m_instance.getNbCities() ; i++) {
+			individu[i] = i;
+		}
+		for (int i = 0 ; i<10 ; i++) {
+			int c1 = 1 + (int) (Math.random()*(individu.length-2));
+			int c2;
+			do {
+				c2 = 1 + (int) (Math.random()*(individu.length-2));
+			} while ((c1==c2)||(c1==(c2+1))||(c2==(c1+1)));
+			individu = copyOrdreDifferent(individu, c1, c2);
+			
+		}
+		return individu;
+		
 		
 	}
 	
@@ -339,7 +358,7 @@ public class AlgorithmeGenetique extends AHeuristic {
 	
 	public int[][] selectionSousEnsemblePopulation(int[][] population) throws Exception {
 		//selection par tournoi
-		int m = 30; //m pair !
+		int m = 8; //m pair !
 		int[][] selectionSousEnsemblePopulation = new int[m][1];
 		for (int i=0 ; i<m ; i++) {
 			int[] competiteur1 = individuAuHasard(population);
