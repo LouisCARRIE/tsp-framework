@@ -18,11 +18,13 @@ public class ColonieDeFourmis extends AHeuristic  {
 	
 	public double ProbaVille (int i, int j, TripletPheroDistanceVisite[][] V) {
 		double p =0.0;
-		if (V[i][j].isVisite()) {
+		if (V[i][j]!= null) {
+			if (V[i][j].isVisite()) {
 			
-		}
-		else {
-			p=(V[i][j].getPheno()/V[i][j].getDistance());
+			}
+			else {
+				p=(V[i][j].getPheno()/V[i][j].getDistance());
+			}
 		}
 		return p;
 		
@@ -35,8 +37,10 @@ public class ColonieDeFourmis extends AHeuristic  {
 			for (int j=0; j<V[0].length; j++) {
 				int i=1;
 				for (int l =0; l<i; l++) {
+					if(V[k][j][l]!=null) {
 					if(V[k][j][l].isVisite()==false) {
 						somme+=V[k][j][l].getPheno();
+					}
 					}
 				}
 				i++;
@@ -46,9 +50,11 @@ public class ColonieDeFourmis extends AHeuristic  {
 			for (int j=0; j<V[0].length; j++) { 	  	    	  	   		 	
 				int i=1; 	  	    	  	   		 	
 				for (int l =0; l<i; l++) { 
+					if(V[k][j][l]!=null) {
 					if(V[k][j][l].isVisite()==false) {
 					V[k][j][l].setPheno(rho*V[k][j][l].getPheno()+somme);
 					V[k][l][j].setPheno(rho*V[k][l][j].getPheno()+somme);
+					}
 					}
 				} 	  	    	  	   		 	
 				i++; 	  	    	  	   		 	
@@ -77,12 +83,16 @@ public class ColonieDeFourmis extends AHeuristic  {
 	public int indiceMinDistance (Couple[][] c) throws Exception {
 		int indice=0;
 		long distanceMin=10^100;
+		int [] L = new int [c[0].length];
 		for (int k = 0; k < c.length; k++) {
 			long distance=distanceMin;
-			for (int j=0; j < c[0].length-1; j++) {
-				distance+=this.m_instance.getDistances(c[k][j].getX(), c[k][j+1].getX());
+			for (int j=0; j < c[0].length; j++) {
+				L = new int [c[0].length];
+				if (c[k][j]!=null) {
+					L[j]=c[k][j].getX();
 				}
-			distance+=this.m_instance.getDistances(c[k][0].getX(), c[k][c[0].length].getX());
+			}
+			distance = distance(L);
 			if (distance<distanceMin) {
 				indice=k;
 				distanceMin=distance;
@@ -91,58 +101,103 @@ public class ColonieDeFourmis extends AHeuristic  {
 		return indice;
 	}
 	
-
+	public long distance (int[] c)throws Exception {
+		long distance=0;
+		for (int k=0; k<c.length-2; k++) {
+			distance+=this.m_instance.getDistances(k, k+1);
+		}
+		distance+=this.m_instance.getDistances(c.length-2,0);
+		return distance;
+	}
 	
+public  TripletPheroDistanceVisite[][][] InitianilisationArretes() throws Exception  {
+	int nbvilles = this.m_instance.getNbCities();
+	int nombreFourmis=100;
+	TripletPheroDistanceVisite[][][] Arretes = new TripletPheroDistanceVisite[nombreFourmis][nbvilles][nbvilles];
+	for (TripletPheroDistanceVisite [][] fourmis : Arretes) { 	  	    	  	   		 	
+		for (int ligne=0; ligne< fourmis.length; ligne ++) { 	  	    	  	   		 		  	    	  	   		 	
+			for (int colonne=0; colonne < fourmis[0].length; colonne++) { 	  	    	  	   		 	
+				if (ligne!=colonne) { 
+					fourmis[ligne][colonne]=new  TripletPheroDistanceVisite(5, this.m_instance.getDistances(ligne, colonne), false); 	  	    	  	   		 						
+				} 	  	    	  	   		 	 	  	    	  	   		 	
+			} 	  	    	  	   		 				 	  	    	  	   		 	
+		} 
+	
+	}
+	return Arretes;
+}
+	public Couple[][] InitialinisationVillesFourmis(){
+		int nbvilles = this.m_instance.getNbCities();
+		int nombreFourmis=100;
+		Couple[][] VillesFourmis = new Couple[nombreFourmis][nbvilles];	  	    	  	   		 	 	  	    	  	   		 	
+	   		for (int l =0; l<nombreFourmis; l++) {
+	   			VillesFourmis[l][0]= new Couple(0,0);
+	   		}
+	   		return VillesFourmis;	   		
+	}
+	
+	public static int  VilleSuivante( double[][] proba) {
+		int nbVillesNonVisitees = proba.length;
+		double[] probaponderees = new double[nbVillesNonVisitees];
+		for (int i=0; i<probaponderees.length; i++) {
+			probaponderees[i]=proba[i][1]*i;
+			}
+		double rang = Math.random()*proba.length;
+		int indice =(int)proba[0][0];
+		int k=0;
+		while (rang<probaponderees[k]) {
+			indice =(int)proba[k][0];
+			k++;
+		}
+		return indice;
+		}
 	
 	@Override
 	public void solve() throws Exception {
-		// TODO Auto-generated method stub
-		
-		int nbvilles = this.m_instance.getNbCities();
-		int nombreFourmis=100;
-		int quantitePhero=100;
-		TripletPheroDistanceVisite[][][] Arretes = new TripletPheroDistanceVisite[nombreFourmis][nbvilles][nbvilles];
-		for (TripletPheroDistanceVisite [][] fourmis : Arretes) { 	  	    	  	   		 	
-			for (int ligne=0; ligne< fourmis.length; ligne ++) { 	  	    	  	   		 		  	    	  	   		 	
-				for (int colonne=0; colonne < fourmis[0].length; colonne++) { 	  	    	  	   		 	
-					if (ligne!=colonne) { 
-						fourmis[ligne][colonne]=new  TripletPheroDistanceVisite(5, this.m_instance.getDistances(ligne, colonne), false); 	  	    	  	   		 						
-					} 	  	    	  	   		 	 	  	    	  	   		 	
-				} 	  	    	  	   		 				 	  	    	  	   		 	
-			} 	  	    	  	   		 	
-		} 
-		
-		Couple[][] VillesFourmis = new Couple[nombreFourmis][nbvilles];	  	    	  	   		 	 	  	    	  	   		 	
-  	   	for (int l =0; l<nombreFourmis; l++) {
-  	   		VillesFourmis[l][0]= new Couple(0,0);
-  	   	}
-		while (quantitePhero>0) {
-			int ite=0;
-			for (int f=0 ; f<nombreFourmis; f++) {
-	  	   		double[][] proba = new double[nbvilles][nbvilles];
-	  	   		for (int m=0; m<nbvilles; m++) {
-	  	   			for (int n=0; n<nbvilles; n++) { 
-	  	   				if (m!=n) {
-	  	   					proba[m][n]=ProbaVille(m,n,Arretes[ite]);
-	  	   				}
-	  	   			}
-	  	   		}
-	  	   	Couple c =  MaxTableauSup(proba);
-	  	 	VillesFourmis[f][ite]=c;
-			}
-	  	   	ite++;		
-			quantitePhero--;
+		int nbvilles = this.m_instance.getNbCities();;
+		int nbFourmis=10;
+		int quantitePhero=5;
+		TripletPheroDistanceVisite[][][] Arretes = new TripletPheroDistanceVisite[nbFourmis][nbvilles][nbvilles]; 
+  	   	long meilleuredistance=2*10^25;
+  	   	Arretes=InitianilisationArretes();
+  	   	int [] meilleurChemin = new int [nbvilles+1];
+  	   	
+  	   	while (quantitePhero>0) {
+  	   	int ite =0;
+  	   		for ( int f=0; f<Arretes.length; f++) {
+  	   			int[] VillesVisitées = new int [nbvilles+1];
+  	   			VillesVisitées[0]=0;
+  	   			VillesVisitées[nbvilles]=0; 		
+  	   			for (int k=0; k<nbvilles-1; k++) {
+  	   				double [][] listeProba = new double [nbvilles-ite+1][2];
+  	   				for (int j=0; j<nbvilles-ite+1; j++) {
+  	   					if (Arretes[f][VillesVisitées[k]][k]!=null) {
+  	   					if (Arretes[f][VillesVisitées[k]][k].isVisite()==false) {
+  	   						listeProba[j][0]=j;
+  	   						listeProba[j][1]=Arretes[f][VillesVisitées[k]][k].getPheno()/Arretes[f][VillesVisitées[k]][k].getDistance();
+  	   					}
+  	   					}
+  	   				}
+  	   				int VilleSuivante=VilleSuivante(listeProba);
+  	   				VillesVisitées[k]=VilleSuivante;
+  	   			}
+  	   			long distanceParcourue=distance(VillesVisitées);
+  	   			if (distanceParcourue<meilleuredistance) {
+  	   				meilleuredistance=distanceParcourue;
+  	   				meilleurChemin=VillesVisitées;
+  	   			}
+  	   		}
+  	   		MajPhero(Arretes);
+  	   		ite++;		
+  	   		quantitePhero--;
 		}
-	
-  	   	int indiceMeilleureFourmi = indiceMinDistance(VillesFourmis);
-  	   	int [] meilleurChemin = new int[nbvilles];
-  	   	for (int z = 0; z<nbvilles; z++) {
-  	   		meilleurChemin[z]=VillesFourmis[indiceMeilleureFourmi][z].getX();
-  	   	}
+  	   	
+  	   	//Elaboration de la solution 
   	   	Solution s = new Solution(m_instance);
 		for (int e = 0; e<meilleurChemin.length ; e++) {
 			s.setCityPosition(meilleurChemin[e], e);
 		}
 		m_solution = s;
-	}
-}
+			}
+  	   	}
+
