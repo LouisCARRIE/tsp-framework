@@ -1,19 +1,18 @@
 package tsp.heuristic;
 
-import java.util.ArrayList;
+
 
 import tsp.Instance;
+import tsp.Solution;
 import tsp.util.Couple;
-import tsp.util.CouplePhenoDistance;
-import tsp.util.CoupleVisite;
 import tsp.util.TripletPheroDistanceVisite;
 
 
 
 public class ColonieDeFourmis extends AHeuristic  {
 
-	public ColonieDeFourmis(Instance instance, String name) throws Exception {
-		super(instance, name);
+	public ColonieDeFourmis(Instance instance) throws Exception {
+		super(instance, "Colonie de fourmis");
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -75,6 +74,23 @@ public class ColonieDeFourmis extends AHeuristic  {
 		return c;
 	}
 	
+	public int indiceMinDistance (Couple[][] c) throws Exception {
+		int indice=0;
+		long distanceMin=10^100;
+		for (int k = 0; k < c.length; k++) {
+			long distance=distanceMin;
+			for (int j=0; j < c[0].length-1; j++) {
+				distance+=this.m_instance.getDistances(c[k][j].getX(), c[k][j+1].getX());
+				}
+			distance+=this.m_instance.getDistances(c[k][0].getX(), c[k][c[0].length].getX());
+			if (distance<distanceMin) {
+				indice=k;
+				distanceMin=distance;
+			}
+		}
+		return indice;
+	}
+	
 
 	
 	
@@ -131,5 +147,15 @@ public class ColonieDeFourmis extends AHeuristic  {
 			quantitePhero--;
 		
 	}
+  	   	int indiceMeilleureFourmi = indiceMinDistance(VillesFourmis);
+  	   	int [] meilleurChemin = new int[nbvilles];
+  	   	for (int z = 0; z<nbvilles; z++) {
+  	   		meilleurChemin[z]=VillesFourmis[indiceMeilleureFourmi][z].getX();
+  	   	}
+  	   	Solution s = new Solution(m_instance);
+		for (int e = 0; e<meilleurChemin.length ; e++) {
+			s.setCityPosition(meilleurChemin[e], e);
+		}
+		m_solution = s;
 	}
 }
