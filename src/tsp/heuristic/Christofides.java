@@ -10,6 +10,7 @@ import tsp.util.Couple;
 public class Christofides extends AHeuristic{
 	
 	List<Integer> villesMarquees = new ArrayList<Integer>();
+	List<Integer> villesPasVisitees = new ArrayList<Integer>();
 	
 	public Christofides(Instance instance) throws Exception {
 		super(instance, "Christofides");
@@ -29,10 +30,15 @@ public class Christofides extends AHeuristic{
 		for(int i = 0; i < l.size(); i++) {
 			t.add(new ArrayList<Integer>());
 		}
+		boolean trouve = false;
 		int k = 0;
 		for(List<Integer> v : l) {
 			for(int e : v) {
-				if (k == index && e != point) {
+				if (trouve) {
+					t.get(k).add(e); //petite MODIF (retire que la première occurence)
+				}else if ((k == index && e == point)) {
+					trouve = true;
+				}else if (k == index && e != point) {
 					t.get(index).add(e);
 				}else if (k != index) {
 					t.get(k).add(e);
@@ -57,6 +63,41 @@ public class Christofides extends AHeuristic{
 		return t;
 	}
 	
+	public static List<List<Couple>> copy1(List<List<Couple>> l) {
+		List<List<Couple>> t = new ArrayList<List<Couple>>();
+		for(int i = 0; i < l.size(); i++) {
+			t.add(new ArrayList<Couple>());
+		}
+		int k = 0;
+		for(List<Couple> v : l) {
+			for(Couple e : v) {
+				t.get(k).add(e);
+			}
+			k++;
+		}
+		return t;
+	}
+	public static List<Couple> copy2(List<Couple> l) {
+		List<Couple> t = new ArrayList<Couple>();
+		for(Couple v : l) {
+			t.add(v);
+		}
+		return t;
+	}
+	public static List<List<Couple>> retireLigneColonne(List<List<Couple>> l, int ligne, int colonne) {
+		List<List<Couple>> t = copy1(l);
+		int k = 0;
+		for(List<Couple> v : l) {
+			for(Couple e : v) {
+				if (e.getX() == ligne || e.getY() == colonne) {
+					t.get(k).remove(e);
+				}
+			}
+			k++;
+		}
+		return t;
+	}
+	
 	/*return un arbre de recouvrement de poids minimal, arbre.get(i) renvoie les sommets suivant du sommet i*/
 	public List<List<Integer>> algoPrim(Instance instance) throws Exception{
 		List<List<Integer>> arbre = new ArrayList<List<Integer>>();
@@ -64,7 +105,7 @@ public class Christofides extends AHeuristic{
 			arbre.add(new ArrayList<Integer>());
 		}
 		List<Integer> villesMarquees = new ArrayList<Integer>();
-		villesMarquees.add(0); //On commence ‡ construire notre arbre depuis la ville 0.
+		villesMarquees.add(0); //On commence par construire notre arbre depuis la ville 0.
 		List<Integer> villesATraitees = new ArrayList<Integer>();
 		for(int i = 1; i<instance.getNbCities(); i++) {
 			villesATraitees.add(i);
@@ -237,6 +278,7 @@ public class Christofides extends AHeuristic{
 			}
 		}
 		
+		
 		/*On soustrait à chaque ligne le min de la ligne puis à chaque colonne le min de la colonne
 
 		/*On soustrait à chaque ligne le min de la ligne puis à chaque colonne le min de la colonne
@@ -270,10 +312,12 @@ public class Christofides extends AHeuristic{
 			}
 		}
 		
+		
 		/*Puis on cherche une solution optimale (etape 2)*/
 		List<Couple> zerosEncadres = new ArrayList<Couple>();
 		List<Couple> zerosBarres = new ArrayList<Couple>();
 		while (zerosEncadres.size() < nbLignes) {
+			
 			//recreer zeros
 			if(zeros.size() == 0) {
 				for(int i = 0; i < nbLignes; i++) {
@@ -286,7 +330,7 @@ public class Christofides extends AHeuristic{
 			}
 			while(zeros.size() > 0) {
 				//On commence par chercher la ligne ayant le moins de zeros non barres et on encadre un zero 
-				//(le plus ‡ gauche)
+				//(le plus à gauche)
 				int ligneContenantLeMoinsDeZerosNonBarres = 0;
 				int[] nombreZerosNonBarres = new int[nbLignes];
 				List<List<Couple>> potentielZerosEncadres = new ArrayList<List<Couple>>();
@@ -339,24 +383,25 @@ public class Christofides extends AHeuristic{
 					}
 				}
 				while(modif1 || modif2) {
-					modif1 = true;
-					modif2 = true;
+					modif1 = false;
+					modif2 = false;
+					
 					for(Couple c : zerosBarres) {
 						if(lignesMarquees.contains(c.getX()) 
 								&& !colonnesMarquees.contains(c.getY())) {
 							colonnesMarquees.add(c.getY());
-						}else {
-							modif1 = false;
+							modif1 = true;
 						}
 					}
 					for(Couple c : zerosEncadres) {
 						if(colonnesMarquees.contains(c.getY()) && !lignesMarquees.contains(c.getX())) {
 							lignesMarquees.add(c.getX());
-						}else {
-							modif2 = false;
+							modif2 = true;
 						}
 					}
+					
 				}
+			
 				zerosEncadres.clear();
 				zerosBarres.clear();
 				List<Integer> lignesNonMarquees = new ArrayList<Integer>();
@@ -364,7 +409,7 @@ public class Christofides extends AHeuristic{
 					lignesNonMarquees.add(i);
 				}
 				for(int k : lignesMarquees) {
-					lignesNonMarquees.remove(k);
+					lignesNonMarquees = remove1(lignesNonMarquees, k);
 				}
 				
 				int[][] sousMatrice = new int[nbLignes][nbColonnes];
@@ -384,33 +429,133 @@ public class Christofides extends AHeuristic{
 				
 				int i = 0;
 				int j = 0;
-				while(sousMatrice[i][j] != 0) {
-					if(j == nbColonnes - 1) {
+				boolean sortir = false;
+				while(sousMatrice[i][j] != 0 && !sortir) {
+					if (i == nbLignes - 1 && j == nbColonnes - 1) { //ATTENTION LIGNE RAJOUTEE
+						sortir = true;
+						i = 0;
+						j = 0;
+					}else if(j == nbColonnes - 1) {
 						j = 0;
 						i += 1;
 					}else{
 						j += 1;
 					}
 				}
-				long min = matrice[i][j];
-				for(int k = 0; k < nbLignes; k++) {
-					for(int l = 0; l < nbColonnes; l++) {
-						if (sousMatrice[k][l] == 0 && matrice[k][l] < min) {
-							min = matrice[k][l];
+				if (!sortir) {
+					long min = matrice[i][j];
+					for(int k = 0; k < nbLignes; k++) {
+						for(int l = 0; l < nbColonnes; l++) {
+							if (sousMatrice[k][l] == 0 && matrice[k][l] < min) {
+								min = matrice[k][l];
+							}
 						}
 					}
-				}
-				for(int k = 0; k < nbLignes; k++) {
-					for(int l = 0; l < nbColonnes; l++) {
-						if (sousMatrice[k][l] == 0) {
-							matrice[k][l] -= min;
-						}else if (sousMatrice[k][l] == etoile) {
-							matrice[k][l] += min;
-						}else {
+					
+					for(int k = 0; k < nbLignes; k++) {
+						for(int l = 0; l < nbColonnes; l++) {
+							if (sousMatrice[k][l] == 0) {
+								matrice[k][l] -= min;
+							}else if (sousMatrice[k][l] == etoile) {
+								matrice[k][l] += min;
+							}else {
+								
+							}
+						}
+					}
+				}else { /*On devrait trouver un couplage parfait de poids minimal si on arrive ici*/
+					/* on recree zeros*/
+					for(int i1 = 0; i1 < nbLignes; i1++) {
+						for(int j1 = 0; j1 < nbColonnes; j1++) {
+							if(matrice[i1][j1] == 0) {
+								zeros.add(new Couple(i1,j1));
+							}
+						}
+					}
+					int[] nombreZerosNonBarres = new int[nbLignes];
+					List<List<Couple>> zerosParLigne = new ArrayList<List<Couple>>(); //zerosParLigne.get(i) renvoie les zeros non barres de la ligne i
+					int[] nombreZerosNonBarresParColonne = new int[nbLignes];
+					List<List<Couple>> zerosParColonne = new ArrayList<List<Couple>>();
+					for(int k = 0; k < nbLignes; k++) {
+						zerosParLigne.add(new ArrayList<Couple>());
+						zerosParColonne.add(new ArrayList<Couple>());
+					}
+					for(Couple c : zeros) {
+						nombreZerosNonBarres[c.getX()] += 1;
+						zerosParLigne.get(c.getX()).add(c);
+						nombreZerosNonBarresParColonne[c.getY()] += 1;
+						zerosParColonne.get(c.getY()).add(c);
+					}
+					List<Integer> lignesContenantUnSeulZero = new ArrayList<Integer>();
+					List<Integer> colonnesContenantUnSeulZero = new ArrayList<Integer>();
+					List<Integer> lignesZerosEncadres = new ArrayList<Integer>();
+					List<Integer> colonnesZerosEncadres = new ArrayList<Integer>();
+					
+					
+					while(contains1(nombreZerosNonBarres) || contains1(nombreZerosNonBarresParColonne)) {
+						lignesZerosEncadres.clear();
+						colonnesZerosEncadres.clear();
+						for(int k = 0; k < nbLignes; k++) {
+							if (nombreZerosNonBarres[k] == 1) {
+								Couple z = zerosParLigne.get(k).get(0);
+								if (!zerosEncadres.contains(z)) {//ATTENTION
+									zerosEncadres.add(z);
+								}
+								zeros.remove(z);
+								zerosParLigne.get(k).remove(z);
+								lignesContenantUnSeulZero.add(k);
+								colonnesZerosEncadres.add(z.getY());
+							}
+							if (nombreZerosNonBarresParColonne[k] == 1) {
+								Couple z = zerosParColonne.get(k).get(0);
+								if (!zerosEncadres.contains(z)) {//ATTENTION LIGNE RAJOUTEE
+									zerosEncadres.add(z);
+								}
+								zeros.remove(z);
+								zerosParColonne.get(k).remove(z);
+								colonnesContenantUnSeulZero.add(k);
+								lignesZerosEncadres.add(z.getX());
+							}
+						}
+						for (int e : lignesContenantUnSeulZero) {
+							nombreZerosNonBarres[e] = 0;
+						}
+						for (int e : colonnesContenantUnSeulZero) {
+							nombreZerosNonBarresParColonne[e] = 0;
+						}
+						for (Couple c : zeros) {
+							
+								if (lignesZerosEncadres.contains(c.getX())) {
+									zerosBarres.add(c);
+									zerosParLigne.get(c.getX()).remove(c);
+									nombreZerosNonBarres[c.getX()] -= 1;
+								}else if (colonnesZerosEncadres.contains(c.getY())) {
+									zerosBarres.add(c);
+									zerosParColonne.get(c.getY()).remove(c);
+									nombreZerosNonBarresParColonne[c.getY()] -= 1;
+								}else {
+									
+								}
 							
 						}
+						for (Couple c : zerosBarres) {
+							if (zeros.contains(c)) {
+								zeros.remove(c);
+							}
+						}
 					}
+					int n = zerosEncadres.size();
+					for (Couple c : zerosEncadres) { //Rajout : on nettoie zerosParLigne
+						zerosParLigne = retireLigneColonne(zerosParLigne, c.getX(), c.getY());
+					}
+					match(retireListesVides(zerosParLigne), nbLignes-n);
+					for (Couple c : this.matchFinal) {
+						zerosEncadres.add(c);
+					}
+					//System.out.println(listToString(zerosEncadres));
+					
 				}
+				
 				
 			}
 		}
@@ -423,10 +568,10 @@ public class Christofides extends AHeuristic{
 	public List<List<Integer>> union(List<List<Integer>> arbre, List<Couple> couplage){
 		List<List<Integer>> graphe = arbre;
 		for(Couple c : couplage) {
-			if(!graphe.get(c.getX()).contains(c.getY())) {
-				graphe.get(c.getX()).add(c.getY());
-				graphe.get(c.getY()).add(c.getX());
-			}
+			//if(!graphe.get(c.getX()).contains(c.getY())) { /*ATTENTION MODIF
+			graphe.get(c.getX()).add(c.getY());
+			graphe.get(c.getY()).add(c.getX());
+			//}
 		}
 		return graphe;
 	}
@@ -439,10 +584,68 @@ public class Christofides extends AHeuristic{
 		}
 		return true;
 	}
-	/*renvoie true si contient toutes les villes*/
-	public boolean contient(Instance instance, List<Integer> villes) {
-		for(int i = 0; i < instance.getNbCities(); i++) {
-			if(!villes.contains(i)) {
+	
+	public String listToString(List<Couple> l) {
+		String res = "[";
+		for (Couple c : l) {
+			res = res + c.toString() + ", ";
+		}
+		res += "]";
+		return res;
+	}
+	
+	public List<List<Couple>> retireListesVides(List<List<Couple>> zerosParLigne){
+		List<List<Couple>> c = new ArrayList<List<Couple>>();
+		for (List<Couple> l : zerosParLigne) {
+			if (l.size() != 0) {
+				c.add(l);
+			}
+		}
+		return c;
+	}
+	
+	List<Couple> match = new ArrayList<Couple>();
+	List<Couple> matchFinal = new ArrayList<Couple>();
+	boolean fin = false;
+	
+	public void match(List<List<Couple>> zerosParLigneNettoye, int nbLignes) {
+		//condition d'arret zeros.size() == 0 ?
+		if (!this.fin) {
+			if (this.match.size() == nbLignes) {
+				this.fin = true;
+				this.matchFinal = copy2(this.match);
+			}else if (this.match.size() < nbLignes && zerosParLigneNettoye.size() == 0) {
+				this.match.remove(this.match.size()-1);
+			}else {
+				int n = zerosParLigneNettoye.get(0).size();
+				int k = 0;
+				for (Couple c : zerosParLigneNettoye.get(0)) {
+					k++;
+					List<List<Couple>> l = retireListesVides(retireLigneColonne(zerosParLigneNettoye, c.getX(), c.getY()));
+					this.match.add(c);
+					match(l, nbLignes);
+				}
+				if (k == n) {
+					this.match.remove(this.match.size() - 1);
+				}
+			}
+		}
+	}
+	
+	
+	/*renvoie true si le vecteur contient 1*/
+	public boolean contains1(int[] v) {
+		for(int i = 0; i < v.length; i++) {
+			if (v[i] == 1) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/*renvoie true si villes contient visitees*/
+	public boolean contient(Instance instance, List<Integer> villes, List<Integer> visitees) {
+		for(int i = 0; i < visitees.size(); i++) {
+			if(!villes.contains(visitees.get(i))) {
 				return false;
 			}
 		}
@@ -461,9 +664,14 @@ public class Christofides extends AHeuristic{
 		List<List<Integer>> graphe = G;
 		List<List<Integer>> copyGraphe = copy(G);
 		int x = 0;
+		for(int i = 0; i < instance.getNbCities(); i++) {
+			if (i != x) {
+				this.villesPasVisitees.add(i);
+			}
+		}
 		chemin.add(x);
 		while(!isEmpty1(graphe)) { //il faudrait tester avant si le graphe est eulerien, si il ne l'est pas modifier biparti
-			
+			//System.out.println(x);
 			for(int y : graphe.get(x)) {
 				this.villesMarquees.clear();
 				copyGraphe = remove2(copyGraphe, x, y);
@@ -472,13 +680,14 @@ public class Christofides extends AHeuristic{
 				copyGraphe.get(x).add(y);
 				copyGraphe.get(y).add(x);
 				
-				if(contient(instance, this.villesMarquees)) {
+				if(contient(instance, this.villesMarquees, this.villesPasVisitees)) {
 					graphe = remove2(graphe, x, y);
 					graphe = remove2(graphe, y, x);
 					copyGraphe = remove2(copyGraphe, x, y);
 					copyGraphe = remove2(copyGraphe, y, x);
 					chemin.add(y);
 					x = y;
+					this.villesPasVisitees = remove1(this.villesPasVisitees, x);
 					break;
 				}
 			}
@@ -496,9 +705,71 @@ public class Christofides extends AHeuristic{
 		sansDoublons.add(sansDoublons.get(0));
 		return sansDoublons;
 	}
+	public String afficherMatrice(long[][] mat) {
+		String res = "[";
+		for(int i = 0; i < mat.length; i++) {
+			for (int j = 0; j < mat[0].length; j++) {
+				res += mat[i][j] + " ";
+			}
+			res += "\n";
+		}
+		return res + "]";
+	}
+	public String afficherMatrice1(int[][] mat) {
+		String res = "[";
+		for(int i = 0; i < mat.length; i++) {
+			for (int j = 0; j < mat[0].length; j++) {
+				res += mat[i][j] + " ";
+			}
+			res += "\n";
+		}
+		return res + "]";
+	}
+	public long[][] creerMatriceTest(){
+		long[][] m = new long[5][5];
+		m[0][0] = 17;
+		m[0][1] = 15;
+		m[0][2] = 9;
+		m[0][3] = 5;
+		m[0][4] = 12;
+		m[1][0] = 16;
+		m[1][1] = 16;
+		m[1][2] = 10;
+		m[1][3] = 5;
+		m[1][4] = 10;
+		m[2][0] = 12;
+		m[2][1] = 15;
+		m[2][2] = 14;
+		m[2][3] = 11;
+		m[2][4] = 5;
+		m[3][0] = 4;
+		m[3][1] = 8;
+		m[3][2] = 14;
+		m[3][3] = 17;
+		m[3][4] = 13;
+		m[4][0] = 13;
+		m[4][1] = 9;
+		m[4][2] = 2;
+		m[4][3] = 7;
+		m[4][4] = 11;
+		return m;
+	}
+	
+	public boolean estEulerien(List<List<Integer>> graphe){
+		int k = 0;
+		for(List<Integer> l : graphe) {
+			if (l.size()%2 == 1) {
+				return false;
+			}
+			k++;
+		}
+		return true;
+	}
 	
 	@Override
 	public void solve() throws Exception {
+		
+		
 		List<List<Integer>> arbre = algoPrim(this.m_instance);
 		List<List<Integer>> graphe = grapheInduit(this.m_instance, arbre);
 		List<List<Integer>> biparti = creationGrapheBiparti1(this.m_instance, graphe, arbre);
@@ -511,6 +782,8 @@ public class Christofides extends AHeuristic{
 		System.out.println(couplage.get(2).getX());
 		System.out.println(couplage.get(2).getY());*/
 		List<List<Integer>> union = union(arbre, couplage);
+		//System.out.println(estEulerien(union));
+		//System.out.println(union);
 		List<Integer> tour = tourEulerien(this.m_instance, union);
 		List<Integer> solution = supprimerDoublons(tour);
 		Solution sol = new Solution(this.m_instance);
