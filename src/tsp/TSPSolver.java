@@ -103,17 +103,17 @@ public class TSPSolver {
 		glouton.solve();
 		this.setSolution(glouton.getSolution());*/
 		
-		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
+		AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
 		genetique.solve();
-		this.setSolution(genetique.getSolution());*/
+		this.setSolution(genetique.getSolution());
 
 		/*LocalSearch localSearch = new LocalSearch(m_instance);
 		localSearch.solve();
 		this.setSolution(localSearch.getSolution());*/
 		
-		Christofides Christofides = new Christofides(m_instance);
+		/*Christofides Christofides = new Christofides(m_instance);
 		Christofides.solve();
-		this.setSolution(Christofides.getSolution());
+		this.setSolution(Christofides.getSolution());*/
 		
 	}
 
