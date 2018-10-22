@@ -102,51 +102,38 @@ public class ColonieDeFourmis extends AHeuristic  {
 		int nombreFourmis=100;
 		int quantitePhero=100;
 		TripletPheroDistanceVisite[][][] Arretes = new TripletPheroDistanceVisite[nombreFourmis][nbvilles][nbvilles];
-		int i=0;
-		for (TripletPheroDistanceVisite [][] fourmis : Arretes) {
-			for (TripletPheroDistanceVisite [] ligne : fourmis) {
-				int j=0;
-				for (TripletPheroDistanceVisite colonne : ligne) {
-					if (i!=j) {
-						colonne.setDistance(this.m_instance.getDistances(i, j));
-						colonne.setPheno(1);
-						colonne.setVisite(false);
-					}
-					j+=1;
-				}
-				i+=1;			
-			}
-		}
+		for (TripletPheroDistanceVisite [][] fourmis : Arretes) { 	  	    	  	   		 	
+			for (int ligne=0; ligne< fourmis.length; ligne ++) { 	  	    	  	   		 		  	    	  	   		 	
+				for (int colonne=0; colonne < fourmis[0].length; colonne++) { 	  	    	  	   		 	
+					if (ligne!=colonne) { 
+						fourmis[ligne][colonne]=new  TripletPheroDistanceVisite(5, this.m_instance.getDistances(ligne, colonne), false); 	  	    	  	   		 						
+					} 	  	    	  	   		 	 	  	    	  	   		 	
+				} 	  	    	  	   		 				 	  	    	  	   		 	
+			} 	  	    	  	   		 	
+		} 
 		
 		Couple[][] VillesFourmis = new Couple[nombreFourmis][nbvilles];	  	    	  	   		 	 	  	    	  	   		 	
   	   	for (int l =0; l<nombreFourmis; l++) {
-  	   		int x = (int) Math.random()*nbvilles;
-  	   		
-  	   		int y = (int) Math.random()*nbvilles%10; 	  	    	  	   		 	
-  	   		while (x==y) {
-  	   			y = (int) Math.random()*nbvilles%10;  	  	    	  	   		 	
-  	   		}
-  	   		VillesFourmis[l][0].setX(x);
-  	   		VillesFourmis[l][0].setX(y);
+  	   		VillesFourmis[l][0]= new Couple(0,0);
+  	   	}
 		while (quantitePhero>0) {
 			int ite=0;
 			for (int f=0 ; f<nombreFourmis; f++) {
 	  	   		double[][] proba = new double[nbvilles][nbvilles];
 	  	   		for (int m=0; m<nbvilles; m++) {
-	  	   			for (int n=0; n<nbvilles; n++) { 	  	    	  	   		 	
-	  	   				proba[m][n]=ProbaVille(m,n,Arretes[ite]);
-	  	   				
+	  	   			for (int n=0; n<nbvilles; n++) { 
+	  	   				if (m!=n) {
+	  	   					proba[m][n]=ProbaVille(m,n,Arretes[ite]);
+	  	   				}
 	  	   			}
 	  	   		}
 	  	   	Couple c =  MaxTableauSup(proba);
-	  	 	VillesFourmis[l][ite].setX(c.getX());
-	   		VillesFourmis[l][ite].setX(c.getY());
+	  	 	VillesFourmis[f][ite]=c;
 			}
 	  	   	ite++;		
-		}
 			quantitePhero--;
-		
-	}
+		}
+	
   	   	int indiceMeilleureFourmi = indiceMinDistance(VillesFourmis);
   	   	int [] meilleurChemin = new int[nbvilles];
   	   	for (int z = 0; z<nbvilles; z++) {
