@@ -1,5 +1,8 @@
 package tsp.heuristic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tsp.Instance;
 import tsp.Solution;
 
@@ -309,7 +312,45 @@ public class AlgorithmeGenetique extends AHeuristic {
 		}
 	}
 	
+	public List<int[]> genererVoisinage(int[] individu) throws Exception {
+		//on choisit un voisinage par inversion de couples d'indices
+		List<int[]> voisinage = new ArrayList<int[]>();
+		for (int i=1 ; i<individu.length-1 ; i++) {
+			for (int j=i+1 ; j<individu.length-1 ; j++) {
+					int[] voisin = copyOf(individu);
+					echangerVilles(voisin, i, j);
+					voisinage.add(voisin);
+			}
+		}
+		return voisinage;
+	}
 	
+	
+	public int[] meilleureSolutionVoisinage(List<int[]> voisinage) throws Exception {
+		int[] meilleureSolution = voisinage.get(0);
+		for (int[] element : voisinage) {
+			if (evaluateIndividu(element)<evaluateIndividu(meilleureSolution)) {
+				meilleureSolution = element;
+			}
+		}
+		return meilleureSolution;
+	}
+	
+	
+	public int[] localSearch(int[] individu) throws Exception {
+		double delta = Double.MAX_VALUE;
+		//for (int i = 0 ; i<10 ; i++) {
+		while (delta>0) {
+			int[] voisin = meilleureSolutionVoisinage(genererVoisinage(individu));
+			delta = evaluateIndividu(individu) - evaluateIndividu(voisin);
+			if (delta>0) {
+				individu = voisin;
+			}
+		}
+		return individu;
+		
+	}
+
 	
 	
 	public void solve() throws Exception {
@@ -327,6 +368,7 @@ public class AlgorithmeGenetique extends AHeuristic {
 		}
 		
 		int[] meilleurIndividu = meilleurIndividu(population);
+		//meilleurIndividu = localSearch(meilleurIndividu);
 		Solution s = new Solution(m_instance);
 		for (int i = 0; i<meilleurIndividu.length ; i++) {
 			s.setCityPosition(meilleurIndividu[i], i);
