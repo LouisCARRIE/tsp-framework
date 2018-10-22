@@ -95,9 +95,9 @@ public class TSPSolver {
 		method.solve();
 		this.setSolution(method.getSolution());*/
 
-		/*PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
+		PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
 		method.solve();
-		this.setSolution(method.getSolution());*/
+		this.setSolution(method.getSolution());
 		
 		
 		/*AlgorithmeGlouton glouton = new AlgorithmeGlouton(m_instance);
@@ -112,9 +112,9 @@ public class TSPSolver {
 		localSearch.solve();
 		this.setSolution(localSearch.getSolution());*/
 		
-		Christofides Christofides = new Christofides(m_instance);
+		/*Christofides Christofides = new Christofides(m_instance);
 		Christofides.solve();
-		this.setSolution(Christofides.getSolution());
+		this.setSolution(Christofides.getSolution());*/
 		
 		/*ColonieDeFourmis genetique = new ColonieDeFourmis(m_instance);
 		genetique.solve();
