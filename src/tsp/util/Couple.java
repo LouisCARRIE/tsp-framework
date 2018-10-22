@@ -30,4 +30,7 @@ public class Couple {
 		return (o != null) && (o instanceof Couple) 
 				&& this.getX() == ((Couple)o).getX() && this.getY() == ((Couple)o).getY();
 	}
+	public String toString() {
+		return "(" + this.x + ", " + this.y + ")"; 
+ }
 }
