@@ -157,6 +157,7 @@ public  TripletPheroDistanceVisite[][][] InitianilisationArretes() throws Except
 		int nbvilles = this.m_instance.getNbCities();;
 		int nbFourmis=10;
 		int quantitePhero=5;
+		double [][] listeProba = new double [nbvilles][2];
 		TripletPheroDistanceVisite[][][] Arretes = new TripletPheroDistanceVisite[nbFourmis][nbvilles][nbvilles]; 
   	   	long meilleuredistance=2*10^25;
   	   	Arretes=InitianilisationArretes();
@@ -169,7 +170,7 @@ public  TripletPheroDistanceVisite[][][] InitianilisationArretes() throws Except
   	   			VillesVisitées[0]=0;
   	   			VillesVisitées[nbvilles]=0; 		
   	   			for (int k=0; k<nbvilles-1; k++) {
-  	   				double [][] listeProba = new double [nbvilles-ite+1][2];
+  	   				listeProba = new double [nbvilles-ite+1][2];
   	   				for (int j=0; j<nbvilles-ite+1; j++) {
   	   					if (Arretes[f][VillesVisitées[k]][k]!=null) {
   	   					if (Arretes[f][VillesVisitées[k]][k].isVisite()==false) {
