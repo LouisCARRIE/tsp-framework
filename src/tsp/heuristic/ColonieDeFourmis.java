@@ -166,26 +166,26 @@ public  TripletPheroDistanceVisite[][][] InitianilisationArretes() throws Except
   	   	while (quantitePhero>0) {
   	   	int ite =0;
   	   		for ( int f=0; f<Arretes.length; f++) {
-  	   			int[] VillesVisitées = new int [nbvilles+1];
-  	   			VillesVisitées[0]=0;
-  	   			VillesVisitées[nbvilles]=0; 		
+  	   			int[] VillesVisitees = new int [nbvilles+1];
+  	   			VillesVisitees[0]=0;
+  	   			VillesVisitees[nbvilles]=0; 		
   	   			for (int k=0; k<nbvilles-1; k++) {
   	   				listeProba = new double [nbvilles-ite+1][2];
   	   				for (int j=0; j<nbvilles-ite+1; j++) {
-  	   					if (Arretes[f][VillesVisitées[k]][k]!=null) {
-  	   					if (Arretes[f][VillesVisitées[k]][k].isVisite()==false) {
+  	   					if (Arretes[f][VillesVisitees[k]][k]!=null) {
+  	   					if (Arretes[f][VillesVisitees[k]][k].isVisite()==false) {
   	   						listeProba[j][0]=j;
-  	   						listeProba[j][1]=Arretes[f][VillesVisitées[k]][k].getPheno()/Arretes[f][VillesVisitées[k]][k].getDistance();
+  	   						listeProba[j][1]=Arretes[f][VillesVisitees[k]][k].getPheno()/Arretes[f][VillesVisitees[k]][k].getDistance();
   	   					}
   	   					}
   	   				}
   	   				int VilleSuivante=VilleSuivante(listeProba);
-  	   				VillesVisitées[k]=VilleSuivante;
+  	   				VillesVisitees[k]=VilleSuivante;
   	   			}
-  	   			long distanceParcourue=distance(VillesVisitées);
+  	   			long distanceParcourue=distance(VillesVisitees);
   	   			if (distanceParcourue<meilleuredistance) {
   	   				meilleuredistance=distanceParcourue;
-  	   				meilleurChemin=VillesVisitées;
+  	   				meilleurChemin=VillesVisitees;
   	   			}
   	   		}
   	   		MajPhero(Arretes);
