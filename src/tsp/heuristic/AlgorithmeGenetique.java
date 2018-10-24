@@ -146,8 +146,8 @@ public class AlgorithmeGenetique extends AHeuristic {
 	public static void mutationPopulationEnfant2opt(int[][] populationEnfant) throws Exception {
 		for(int i=0 ; i<populationEnfant.length ; i++) {
 			double r = Math.random();
-			if (r<1) {
-			//if (r<0.2) {
+			//if (r<1) {
+			if (r<0.2) {
 				populationEnfant[i] = mutationIndividu2opt(populationEnfant[i]);
 			}
 		}
