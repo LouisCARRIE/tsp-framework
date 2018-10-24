@@ -7,6 +7,7 @@ import tsp.heuristic.Christofides;
 import tsp.heuristic.ColonieDeFourmis;
 import tsp.heuristic.LocalSearch;
 import tsp.heuristic.PlusProcheVoisin;
+import tsp.metaheuristic.TwoOptAmeliore;
 
 /**
  * 
@@ -104,9 +105,9 @@ public class TSPSolver {
 		glouton.solve();
 		this.setSolution(glouton.getSolution());*/
 		
-		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
+		AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
 		genetique.solve();
-		this.setSolution(genetique.getSolution());*/
+		this.setSolution(genetique.getSolution());
 		
 		/*LocalSearch localSearch = new LocalSearch(m_instance);
 		localSearch.solve();
@@ -116,9 +117,13 @@ public class TSPSolver {
 		Christofides.solve();
 		this.setSolution(Christofides.getSolution());*/
 		
-		ColonieDeFourmis genetique = new ColonieDeFourmis(m_instance);
-		genetique.solve();
-		this.setSolution(genetique.getSolution());
+		/*ColonieDeFourmis fourmis = new ColonieDeFourmis(m_instance);
+		fourmis.solve();
+		this.setSolution(fourmis.getSolution());*/
+		
+		/*TwoOpt opt = new TwoOpt(m_instance);
+		Solution s = opt.solve(new Solution(m_instance));
+		this.setSolution(s);*/
 	}
 
 	// -----------------------------
