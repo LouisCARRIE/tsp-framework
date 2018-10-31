@@ -625,7 +625,7 @@ public class Christofides extends AHeuristic{
 					this.match.add(c);
 					match(l, nbLignes);
 				}
-				if (k == n) {
+				if (k == n && this.match.size() != 0) {
 					this.match.remove(this.match.size() - 1);
 				}
 			}

@@ -5,6 +5,7 @@ import tsp.heuristic.AlgorithmeGlouton;
 import tsp.heuristic.ArbreCouvrant;
 import tsp.heuristic.Christofides;
 import tsp.heuristic.ColonieDeFourmis;
+import tsp.heuristic.K_opt;
 import tsp.heuristic.LocalSearch;
 import tsp.heuristic.PlusProcheVoisin;
 import tsp.metaheuristic.TwoOptAmeliore;
@@ -105,9 +106,9 @@ public class TSPSolver {
 		glouton.solve();
 		this.setSolution(glouton.getSolution());*/
 		
-		AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
+		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
 		genetique.solve();
-		this.setSolution(genetique.getSolution());
+		this.setSolution(genetique.getSolution());*/
 		
 		/*LocalSearch localSearch = new LocalSearch(m_instance);
 		localSearch.solve();
@@ -124,6 +125,10 @@ public class TSPSolver {
 		/*TwoOpt opt = new TwoOpt(m_instance);
 		Solution s = opt.solve(new Solution(m_instance));
 		this.setSolution(s);*/
+		
+		K_opt method = new K_opt(m_instance);
+		method.solve();
+		this.setSolution(method.getSolution());
 	}
 
 	// -----------------------------
