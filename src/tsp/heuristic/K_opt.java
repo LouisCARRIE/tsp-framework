@@ -65,7 +65,6 @@ public class K_opt extends AHeuristic{
 		for (int i = 0; i < this.m_instance.getNbCities(); i++) {
 			solution.add(s.getSolution().getCity(i));
 		}
-		
 		int m = this.m_instance.getNbCities();
 		//int m = 20;
 		//On récupère la liste des m plus proches voisins pour chaque node
