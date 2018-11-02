@@ -1,4 +1,4 @@
-package tsp.heuristic;
+package tsp.metaheuristic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,11 +6,11 @@ import java.util.List;
 import tsp.Instance;
 import tsp.Solution;
 
-public class LocalSearch extends AHeuristic {
+public class LocalSearchSwap extends AMetaheuristic {
 
 
-	public LocalSearch(Instance instance) throws Exception {
-		super(instance, "Algorithme LocalSearch");
+	public LocalSearchSwap(Instance instance) throws Exception {
+		super(instance, "Algorithme LocalSearchSwap");
 		
 	}
 	
@@ -82,7 +82,7 @@ public class LocalSearch extends AHeuristic {
 	}
 	
 	
-	public int[] localSearch(int[] individu) throws Exception {
+	public int[] localSearchSwap(int[] individu) throws Exception {
 		double delta = Double.MAX_VALUE;
 		//for (int i = 0 ; i<10 ; i++) {
 		while (delta>0) {
@@ -99,15 +99,14 @@ public class LocalSearch extends AHeuristic {
 
 	@Override
 	//méthode trop longue pour les problemes contenant plus de 320 villes !
-	//dans la méthode localSearch remplacer la boucle while par un fort ?
-	public void solve() throws Exception {
+	//dans la méthode localSearchSwap remplacer la boucle while par un for ?
+	public Solution solve(Solution sol) throws Exception {
 		int[] individu = genererIndividu();
-		individu = localSearch(individu);
-		Solution s = new Solution(m_instance);
+		individu = localSearchSwap(individu);
 		for (int i = 0; i<individu.length ; i++) {
-			s.setCityPosition(individu[i], i);
+			sol.setCityPosition(individu[i], i);
 		}
-		m_solution = s;
+		return sol;
 	}
 	
 	

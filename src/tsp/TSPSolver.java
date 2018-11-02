@@ -6,8 +6,8 @@ import tsp.heuristic.ArbreCouvrant;
 import tsp.heuristic.Christofides;
 import tsp.heuristic.ColonieDeFourmis;
 import tsp.heuristic.K_opt;
-import tsp.heuristic.LocalSearch;
 import tsp.heuristic.PlusProcheVoisin;
+import tsp.metaheuristic.LocalSearchSwap;
 import tsp.metaheuristic.TwoOptAmeliore;
 
 /**
@@ -113,6 +113,10 @@ public class TSPSolver {
 		/*LocalSearch localSearch = new LocalSearch(m_instance);
 		localSearch.solve();
 		this.setSolution(localSearch.getSolution());*/
+		
+		/*LocalSearchSwap localSearchSwap = new LocalSearchSwap(m_instance);
+		Solution s = localSearchSwap.solve(new Solution(m_instance));
+		this.setSolution(s);*/
 		
 		/*Christofides Christofides = new Christofides(m_instance);
 		Christofides.solve();
