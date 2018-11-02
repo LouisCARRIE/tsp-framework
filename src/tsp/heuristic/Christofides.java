@@ -7,15 +7,35 @@ import tsp.Instance;
 import tsp.Solution;
 import tsp.util.Couple;
 
+/**
+ * The Class Christofides.
+ * @author Thomas Bazaille
+ */
 public class Christofides extends AHeuristic{
 	
+	/** The villes marquees. */
 	List<Integer> villesMarquees = new ArrayList<Integer>();
+	
+	/** The villes pas visitees. */
 	List<Integer> villesPasVisitees = new ArrayList<Integer>();
 	
+	/**
+	 * Instantiates a new christofides.
+	 *
+	 * @param instance the instance
+	 * @throws Exception the exception
+	 */
 	public Christofides(Instance instance) throws Exception {
 		super(instance, "Christofides");
 	}
 	
+	/**
+	 * Removes the 1.
+	 *
+	 * @param l the l
+	 * @param point the point
+	 * @return the list
+	 */
 	public static List<Integer> remove1(List<Integer> l, int point) {
 		List<Integer> t = new ArrayList<Integer>();
 		for(int e : l) {
@@ -25,6 +45,15 @@ public class Christofides extends AHeuristic{
 		}
 		return t;
 	}
+	
+	/**
+	 * Removes the 2.
+	 *
+	 * @param l the l
+	 * @param index the index
+	 * @param point the point
+	 * @return the list
+	 */
 	public static List<List<Integer>> remove2(List<List<Integer>> l, int index, int point) {
 		List<List<Integer>> t = new ArrayList<List<Integer>>();
 		for(int i = 0; i < l.size(); i++) {
@@ -48,6 +77,13 @@ public class Christofides extends AHeuristic{
 		}
 		return t;
 	}
+	
+	/**
+	 * Copy.
+	 *
+	 * @param l the l
+	 * @return the list
+	 */
 	public static List<List<Integer>> copy(List<List<Integer>> l) {
 		List<List<Integer>> t = new ArrayList<List<Integer>>();
 		for(int i = 0; i < l.size(); i++) {
@@ -63,6 +99,12 @@ public class Christofides extends AHeuristic{
 		return t;
 	}
 	
+	/**
+	 * Copy 1.
+	 *
+	 * @param l the l
+	 * @return the list
+	 */
 	public static List<List<Couple>> copy1(List<List<Couple>> l) {
 		List<List<Couple>> t = new ArrayList<List<Couple>>();
 		for(int i = 0; i < l.size(); i++) {
@@ -77,6 +119,13 @@ public class Christofides extends AHeuristic{
 		}
 		return t;
 	}
+	
+	/**
+	 * Copy 2.
+	 *
+	 * @param l the l
+	 * @return the list
+	 */
 	public static List<Couple> copy2(List<Couple> l) {
 		List<Couple> t = new ArrayList<Couple>();
 		for(Couple v : l) {
@@ -84,6 +133,15 @@ public class Christofides extends AHeuristic{
 		}
 		return t;
 	}
+	
+	/**
+	 * Retire ligne colonne.
+	 *
+	 * @param l the l
+	 * @param ligne the ligne
+	 * @param colonne the colonne
+	 * @return the list
+	 */
 	public static List<List<Couple>> retireLigneColonne(List<List<Couple>> l, int ligne, int colonne) {
 		List<List<Couple>> t = copy1(l);
 		int k = 0;
@@ -98,6 +156,13 @@ public class Christofides extends AHeuristic{
 		return t;
 	}
 	
+	/**
+	 * Algo prim.
+	 *
+	 * @param instance the instance
+	 * @return the list
+	 * @throws Exception the exception
+	 */
 	/*return un arbre de recouvrement de poids minimal, arbre.get(i) renvoie les sommets suivant du sommet i*/
 	public List<List<Integer>> algoPrim(Instance instance) throws Exception{
 		List<List<Integer>> arbre = new ArrayList<List<Integer>>();
@@ -131,6 +196,12 @@ public class Christofides extends AHeuristic{
 		return arbre;
 	}
 	
+	/**
+	 * Sommets de degres impairs.
+	 *
+	 * @param arbre the arbre
+	 * @return the list
+	 */
 	public List<Integer> sommetsDeDegresImpairs(List<List<Integer>> arbre){
 		List<Integer> degresImpairs = new ArrayList<Integer>();
 		int k = 0;
@@ -143,6 +214,13 @@ public class Christofides extends AHeuristic{
 		return degresImpairs;
 	}
 	
+	/**
+	 * Graphe induit.
+	 *
+	 * @param instance the instance
+	 * @param arbre the arbre
+	 * @return the list
+	 */
 	/* return le graphe induit de l'ensemble des sommets de degrÈ impair, 
 	 * prend en entrÈe un arbre de recouvrement de poids minimal*/
 	public List<List<Integer>> grapheInduit(Instance instance, List<List<Integer>> arbre){
@@ -162,6 +240,15 @@ public class Christofides extends AHeuristic{
 		return graphe;
 	}
 	
+	/**
+	 * Creation graphe biparti.
+	 *
+	 * @param instance the instance
+	 * @param graphe the graphe
+	 * @param arbre the arbre
+	 * @return the list
+	 * @throws Exception the exception
+	 */
 	/*calcule deux liste L et R de sorte que G = (L,R) soit un graphe biparti (nÈcessaire pour le couplage parfait)
 	 * prend en entrÈe le graphe induit par l'ensemble des sommets de degre impair, et un arbre de recouvrement*/
 	public List<List<Integer>> creationGrapheBiparti(Instance instance, List<List<Integer>> graphe, List<List<Integer>> arbre) throws Exception{
@@ -215,6 +302,16 @@ public class Christofides extends AHeuristic{
 		}
 		return biparti;
 	}
+	
+	/**
+	 * Creation graphe biparti 1.
+	 *
+	 * @param instance the instance
+	 * @param graphe the graphe
+	 * @param arbre the arbre
+	 * @return the list
+	 * @throws Exception the exception
+	 */
 	public List<List<Integer>> creationGrapheBiparti1(Instance instance, List<List<Integer>> graphe, List<List<Integer>> arbre) throws Exception{
 		//List<List<Integer>> graphe = grapheInduit(instance, algoPrim(instance));
 		List<List<Integer>> biparti = new ArrayList<List<Integer>>();
@@ -263,6 +360,15 @@ public class Christofides extends AHeuristic{
 		}
 		return biparti;
 	}
+	
+	/**
+	 * Creation couplage parfait.
+	 *
+	 * @param instance the instance
+	 * @param biparti the biparti
+	 * @return the list
+	 * @throws Exception the exception
+	 */
 	/*algorithme hongrois*/
 	public List<Couple> creationCouplageParfait(Instance instance, List<List<Integer>> biparti) throws Exception{
 		List<Couple> couplage = new ArrayList<Couple>();
@@ -565,6 +671,13 @@ public class Christofides extends AHeuristic{
 		return couplage;
 	}
 	
+	/**
+	 * Union.
+	 *
+	 * @param arbre the arbre
+	 * @param couplage the couplage
+	 * @return the list
+	 */
 	public List<List<Integer>> union(List<List<Integer>> arbre, List<Couple> couplage){
 		List<List<Integer>> graphe = arbre;
 		for(Couple c : couplage) {
@@ -576,6 +689,12 @@ public class Christofides extends AHeuristic{
 		return graphe;
 	}
 	
+	/**
+	 * Checks if is empty 1.
+	 *
+	 * @param G the g
+	 * @return true, if is empty 1
+	 */
 	public boolean isEmpty1(List<List<Integer>> G) {
 		for(List<Integer> l : G) {
 			if(!l.isEmpty()) {
@@ -585,6 +704,12 @@ public class Christofides extends AHeuristic{
 		return true;
 	}
 	
+	/**
+	 * List to string.
+	 *
+	 * @param l the l
+	 * @return the string
+	 */
 	public String listToString(List<Couple> l) {
 		String res = "[";
 		for (Couple c : l) {
@@ -594,6 +719,12 @@ public class Christofides extends AHeuristic{
 		return res;
 	}
 	
+	/**
+	 * Retire listes vides.
+	 *
+	 * @param zerosParLigne the zeros par ligne
+	 * @return the list
+	 */
 	public List<List<Couple>> retireListesVides(List<List<Couple>> zerosParLigne){
 		List<List<Couple>> c = new ArrayList<List<Couple>>();
 		for (List<Couple> l : zerosParLigne) {
@@ -604,10 +735,21 @@ public class Christofides extends AHeuristic{
 		return c;
 	}
 	
+	/** The match. */
 	List<Couple> match = new ArrayList<Couple>();
+	
+	/** The match final. */
 	List<Couple> matchFinal = new ArrayList<Couple>();
+	
+	/** The fin. */
 	boolean fin = false;
 	
+	/**
+	 * Match.
+	 *
+	 * @param zerosParLigneNettoye the zeros par ligne nettoye
+	 * @param nbLignes the nb lignes
+	 */
 	public void match(List<List<Couple>> zerosParLigneNettoye, int nbLignes) {
 		//condition d'arret zeros.size() == 0 ?
 		if (!this.fin) {
@@ -633,6 +775,12 @@ public class Christofides extends AHeuristic{
 	}
 	
 	
+	/**
+	 * Contains 1.
+	 *
+	 * @param v the v
+	 * @return true, if successful
+	 */
 	/*renvoie true si le vecteur contient 1*/
 	public boolean contains1(int[] v) {
 		for(int i = 0; i < v.length; i++) {
@@ -642,6 +790,15 @@ public class Christofides extends AHeuristic{
 		}
 		return false;
 	}
+	
+	/**
+	 * Contient.
+	 *
+	 * @param instance the instance
+	 * @param villes the villes
+	 * @param visitees the visitees
+	 * @return true, if successful
+	 */
 	/*renvoie true si villes contient visitees*/
 	public boolean contient(Instance instance, List<Integer> villes, List<Integer> visitees) {
 		for(int i = 0; i < visitees.size(); i++) {
@@ -651,6 +808,14 @@ public class Christofides extends AHeuristic{
 		}
 		return true;
 	}
+	
+	/**
+	 * Explorer.
+	 *
+	 * @param arbre the arbre
+	 * @param villeVisitee the ville visitee
+	 * @throws Exception the exception
+	 */
 	public void explorer(List<List<Integer>> arbre, int villeVisitee) throws Exception {
 		this.villesMarquees.add(villeVisitee);
 		for(int villeFils : arbre.get(villeVisitee)) {
@@ -659,6 +824,15 @@ public class Christofides extends AHeuristic{
 			}
 		}
 	}
+	
+	/**
+	 * Tour eulerien.
+	 *
+	 * @param instance the instance
+	 * @param G the g
+	 * @return the list
+	 * @throws Exception the exception
+	 */
 	public List<Integer> tourEulerien(Instance instance, List<List<Integer>> G) throws Exception{
 		List<Integer> chemin = new ArrayList<Integer>();
 		List<List<Integer>> graphe = G;
@@ -695,6 +869,12 @@ public class Christofides extends AHeuristic{
 		return chemin;
 	}
 	
+	/**
+	 * Supprimer doublons.
+	 *
+	 * @param l the l
+	 * @return the list
+	 */
 	public List<Integer> supprimerDoublons(List<Integer> l){
 		List<Integer> sansDoublons = new ArrayList<Integer>();
 		for(int e : l) {
@@ -705,6 +885,13 @@ public class Christofides extends AHeuristic{
 		sansDoublons.add(sansDoublons.get(0));
 		return sansDoublons;
 	}
+	
+	/**
+	 * Afficher matrice.
+	 *
+	 * @param mat the mat
+	 * @return the string
+	 */
 	public String afficherMatrice(long[][] mat) {
 		String res = "[";
 		for(int i = 0; i < mat.length; i++) {
@@ -715,6 +902,13 @@ public class Christofides extends AHeuristic{
 		}
 		return res + "]";
 	}
+	
+	/**
+	 * Afficher matrice 1.
+	 *
+	 * @param mat the mat
+	 * @return the string
+	 */
 	public String afficherMatrice1(int[][] mat) {
 		String res = "[";
 		for(int i = 0; i < mat.length; i++) {
@@ -725,6 +919,12 @@ public class Christofides extends AHeuristic{
 		}
 		return res + "]";
 	}
+	
+	/**
+	 * Creer matrice test.
+	 *
+	 * @return the long[][]
+	 */
 	public long[][] creerMatriceTest(){
 		long[][] m = new long[5][5];
 		m[0][0] = 17;
@@ -755,6 +955,12 @@ public class Christofides extends AHeuristic{
 		return m;
 	}
 	
+	/**
+	 * Est eulerien.
+	 *
+	 * @param graphe the graphe
+	 * @return true, if successful
+	 */
 	public boolean estEulerien(List<List<Integer>> graphe){
 		int k = 0;
 		for(List<Integer> l : graphe) {
@@ -766,6 +972,9 @@ public class Christofides extends AHeuristic{
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see tsp.heuristic.AHeuristic#solve()
+	 */
 	@Override
 	public void solve() throws Exception {
 		
@@ -775,12 +984,7 @@ public class Christofides extends AHeuristic{
 		List<List<Integer>> biparti = creationGrapheBiparti1(this.m_instance, graphe, arbre);
 
 		List<Couple> couplage = creationCouplageParfait(this.m_instance, biparti);
-		/*System.out.println(couplage.get(0).getX());
-		System.out.println(couplage.get(0).getY());
-		System.out.println(couplage.get(1).getX());
-		System.out.println(couplage.get(1).getY());
-		System.out.println(couplage.get(2).getX());
-		System.out.println(couplage.get(2).getY());*/
+		
 		List<List<Integer>> union = union(arbre, couplage);
 		//System.out.println(estEulerien(union));
 		//System.out.println(union);

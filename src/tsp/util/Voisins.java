@@ -14,7 +14,16 @@ public class Voisins {
 		}
 	}
 
-	//inserer la ville k dans la liste des plus proches voisins de i
+	/**
+	 * Inserer : inserer la ville k dans la liste des plus proches voisins de i
+	 *de sorte que les plus proches voisins de i soient classés dans l'ordre croissant de leur distance à i,
+	 *ainsi voisins.get(i).get(0) correspond à la ville la plus proche de la ville i.
+	 * @param instance the instance
+	 * @param i : une ville de l'instance
+	 * @param k : la ville à insérer
+	 * @param m : le nombre maximal de plus proches voisins de i stocké dans la liste 
+	 * @throws Exception the exception
+	 */
 	public void inserer(Instance instance, int i, int k, int m) throws Exception {
 		int n = this.voisins.get(i).size();
 		
@@ -31,6 +40,12 @@ public class Voisins {
 		
 	
 	
+	/**
+	 * Get.
+	 *
+	 * @param i : une ville de l'instance
+	 * @return la liste des plus proches voisins de i
+	 */
 	public List<Integer> get(int i) {
 		return this.voisins.get(i);
 	}

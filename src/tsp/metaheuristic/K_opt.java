@@ -8,6 +8,10 @@ import tsp.Solution;
 
 import tsp.util.Voisins;
 
+/**
+ * The Class K_opt.
+ * @author Thomas Bazaille
+ */
 public class K_opt extends AMetaheuristic{
 
 	public K_opt(Instance instance) throws Exception {

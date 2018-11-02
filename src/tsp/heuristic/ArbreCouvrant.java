@@ -7,14 +7,33 @@ import java.util.List;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
+/**
+ * The Class ArbreCouvrant.
+ * @author Thomas Bazaille
+ */
 public class ArbreCouvrant extends AHeuristic{
 	
+	/** The villes marquees. On en fera l'utilisation dans la fonction recursive explorer */
 	List<Integer> villesMarquees = new ArrayList<Integer>();
 	
+	/**
+	 * Instantiates a new arbre couvrant.
+	 *
+	 * @param instance the instance
+	 * @throws Exception the exception
+	 */
 	public ArbreCouvrant(Instance instance) throws Exception {
 		super(instance, "Arbre Couvrant de poids minimal");
 	}
 	
+	/**
+	 * Removes l'element point dans la liste l.
+	 *
+	 * @param l the list
+	 * @param point the point
+	 * @return la liste l sans l'element point
+	 */
 	public static List<Integer> remove1(List<Integer> l, int point) {
 		List<Integer> t = new ArrayList<Integer>();
 		for(int e : l) {
@@ -25,8 +44,14 @@ public class ArbreCouvrant extends AHeuristic{
 		return t;
 	}
 	
-	/*return un arbre de recouvrement de poids minimal, arbre.get(i) renvoie les fils du sommet i, i est donc le 
-	 * père des sommets de arbre.get(i)*/
+	/**
+	 * Algo de Prim.
+	 *
+	 * @param instance the instance
+	 * @return une liste correspondant à un arbre de recouvrement de poids minimal
+	 * arbre.get(i) renvoie les fils du sommet i, i est donc le père des sommets de arbre.get(i)
+	 * @throws Exception the exception
+	 */
 	public static List<List<Integer>> algoPrim(Instance instance) throws Exception{
 		List<List<Integer>> arbre = new ArrayList<List<Integer>>();
 		for(int i = 0; i<instance.getNbCities(); i++) {
@@ -59,6 +84,13 @@ public class ArbreCouvrant extends AHeuristic{
 		return arbre;
 	}
 	
+	/**
+	 * Explorer. On fait un parcours en profondeur de notre arbre.
+	 *
+	 * @param arbre : l'arbre couvrant que l'on a fabriqué avec l'algo de prim
+	 * @param villeVisitee the ville visitee
+	 * @throws Exception the exception
+	 */
 	public void explorer(List<List<Integer>> arbre, int villeVisitee) throws Exception {
 		this.villesMarquees.add(villeVisitee);
 		System.out.println(villeVisitee);
@@ -73,7 +105,7 @@ public class ArbreCouvrant extends AHeuristic{
 	public void solve() throws Exception {
 		List<List<Integer>> arbre = algoPrim(this.m_instance);
 		System.out.println(arbre);
-		int debut = 4; //faire boucle for sur la ville de depart 'debut'
+		int debut = 0;
 		explorer(arbre, debut);
 		Solution sol = new Solution(this.m_instance);
 		int k = 0;
