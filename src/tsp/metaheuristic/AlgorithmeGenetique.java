@@ -118,6 +118,7 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	public int[][] selectionSousEnsemblePopulation(int[][] population) throws Exception {
 		//selection par tournoi
 		int m = 10; //m pair !
+		//int m = 200;
 		int[][] selectionSousEnsemblePopulation = new int[m][1];
 		for (int i=0 ; i<m ; i++) {
 			int[] competiteur1 = individuAuHasard(population);
@@ -151,6 +152,28 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 				int c1 = 1 + (int) (Math.random()*(n-2));
 				populationenfant[i] = annexe(selectionSousEnsemblePopulation[i], selectionSousEnsemblePopulation[i+1], c1);
 				populationenfant[i+1] = annexe(selectionSousEnsemblePopulation[i+1], selectionSousEnsemblePopulation[i], c1);		
+			} else {
+				populationenfant[i] = copyOf(selectionSousEnsemblePopulation[i]);
+				populationenfant[i+1] = copyOf(selectionSousEnsemblePopulation[i+1]);
+			}
+			
+			
+		}
+
+		return populationenfant;
+	}
+	
+	
+	public int[][] collisionCrossOver(int[][] selectionSousEnsemblePopulation) throws Exception {
+		int[][] populationenfant = new int[selectionSousEnsemblePopulation.length][1];
+		double probadhybridation = 0.66;
+		int n = selectionSousEnsemblePopulation[0].length;
+		for (int i=0 ; i<selectionSousEnsemblePopulation.length-1 ; i+=2) {
+			
+			double r = Math.random(); //r entre 0 inclus et 1 exclus --> il faut les 2 inclus !!	
+			if (r<=probadhybridation) {
+				populationenfant[i] = collision1(selectionSousEnsemblePopulation[i], selectionSousEnsemblePopulation[i+1]);
+				populationenfant[i+1] = collision2(selectionSousEnsemblePopulation[i+1], selectionSousEnsemblePopulation[i]);		
 			} else {
 				populationenfant[i] = copyOf(selectionSousEnsemblePopulation[i]);
 				populationenfant[i+1] = copyOf(selectionSousEnsemblePopulation[i+1]);
@@ -480,6 +503,71 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 		}
 	}
 	
+	
+	public long[] tableauMassesChromosomesIndividu(int[] individu) throws Exception {
+		long[] tableauMassesChromosomesIndividu = new long[individu.length];
+		for (int i=1 ; i<individu.length-1 ; i++) {
+			tableauMassesChromosomesIndividu[i] = m_instance.getDistances(individu[i-1], individu[i]) + m_instance.getDistances(individu[i], individu[i+1]);
+		}
+		return tableauMassesChromosomesIndividu;
+	}
+	
+	
+	public double velociteChromosomesIndividu(int[] individu) throws Exception {
+		return evaluateIndividu(individu);
+	}
+	
+	
+	public int[] collision1(int[] individu1, int[] individu2) throws Exception {
+		int[] enfant1 = new int[individu1.length];
+		for (int i=1 ; i<enfant1.length-1 ; i++) {
+			double v1 = (tableauMassesChromosomesIndividu(individu1)[i] - tableauMassesChromosomesIndividu(individu2)[i])*velociteChromosomesIndividu(individu1)
+					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i])
+					 + 2*tableauMassesChromosomesIndividu(individu2)[i]*velociteChromosomesIndividu(individu2)
+					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i]);
+			if (v1<=0) {
+				enfant1[i] = individu1[i];
+			}
+		}
+		for (int i=1 ; i<enfant1.length-1 ; i++) {
+			if (enfant1[i]==0) {
+				enfant1[i] = premierNonPresent(enfant1, individu2);
+			}
+		}
+		return enfant1;
+	}
+	
+	
+	
+	public int[] collision2(int[] individu1, int[] individu2) throws Exception {
+		int[] enfant2 = new int[individu1.length];
+		for (int i=1 ; i<enfant2.length-1 ; i++) {
+			double v2 = 2*tableauMassesChromosomesIndividu(individu1)[i]*velociteChromosomesIndividu(individu1)
+					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i])
+					 - (tableauMassesChromosomesIndividu(individu1)[i] - tableauMassesChromosomesIndividu(individu2)[i])*velociteChromosomesIndividu(individu2)
+					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i]);
+					 
+			if (v2<=0) {
+				enfant2[i] = individu2[i];
+			}
+		}
+		for (int i=1 ; i<enfant2.length-1 ; i++) {
+			if (enfant2[i]==0) {
+				enfant2[i] = premierNonPresent(enfant2, individu1);
+			}
+		}
+		return enfant2;
+	}
+	
+	
+	public static int premierNonPresent(int[] individu1, int[] individu2) throws Exception {
+		int i = 1;
+		while (estPresent(individu1, individu2[i])) {
+			i++;
+		}
+		return individu2[i];
+	}
+	
 	/**
 	 * Generer voisinage.
 	 *
@@ -551,9 +639,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 		population = genererPopulation(20);
 		//population = genererPopulationSemiAleatoirement(20);
 		
-		for (int i=0 ; i<100000; i++) {
+		//population = genererPopulation(1000);
+		
+		for (int i=0 ; i<100000 ; i++) {
+		//for (int i=0 ; i<1000 ; i++) {
 			int [][] selectionSousEnsemblePopulation = selectionSousEnsemblePopulation(population);
 			int [][] populationEnfant = crossOver(selectionSousEnsemblePopulation);
+			//int [][] populationEnfant = collisionCrossOver(selectionSousEnsemblePopulation);
 			mutationPopulationEnfant2opt(populationEnfant);
 			nouvellePopulation(population, populationEnfant);
 			
