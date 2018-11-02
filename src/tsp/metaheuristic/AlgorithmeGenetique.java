@@ -1,4 +1,4 @@
-package tsp.heuristic;
+package tsp.metaheuristic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import tsp.Instance;
 import tsp.Solution;
 
-public class AlgorithmeGenetique extends AHeuristic {
+public class AlgorithmeGenetique extends AMetaheuristic {
 	
 	//JAutoDoc
 
@@ -353,9 +353,9 @@ public class AlgorithmeGenetique extends AHeuristic {
 		
 	}
 
-	
-	
-	public void solve() throws Exception {
+
+	@Override
+	public Solution solve(Solution sol) throws Exception {
 		
 		int[][] population;
 		population = genererPopulation(20);
@@ -371,12 +371,10 @@ public class AlgorithmeGenetique extends AHeuristic {
 		
 		int[] meilleurIndividu = meilleurIndividu(population);
 		//meilleurIndividu = localSearch(meilleurIndividu);
-		Solution s = new Solution(m_instance);
 		for (int i = 0; i<meilleurIndividu.length ; i++) {
-			s.setCityPosition(meilleurIndividu[i], i);
+			sol.setCityPosition(meilleurIndividu[i], i);
 		}
-		m_solution = s;
-		
+		return sol;
 	}
 
 }
