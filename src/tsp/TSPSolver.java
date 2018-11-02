@@ -4,11 +4,11 @@ import tsp.heuristic.AlgorithmeGlouton;
 import tsp.heuristic.ArbreCouvrant;
 import tsp.heuristic.Christofides;
 import tsp.heuristic.ColonieDeFourmis;
-import tsp.heuristic.K_opt;
 import tsp.heuristic.PlusProcheVoisin;
 import tsp.metaheuristic.LocalSearchSwap;
 import tsp.metaheuristic.TwoOpt;
 import tsp.metaheuristic.AlgorithmeGenetique;
+import tsp.metaheuristic.K_opt;
 
 /**
  * 
@@ -126,9 +126,15 @@ public class TSPSolver {
 		Solution s = opt.solve(new Solution(m_instance));
 		this.setSolution(s);*/
 		
+		
+		
+		/*On choisit une heuristique qui donne une solution approchée en premier lieu
+		 * C'est cette solution que l'on va améliorer*/
+		PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
+		s.solve();
 		K_opt method = new K_opt(m_instance);
-		method.solve();
-		this.setSolution(method.getSolution());
+		Solution sol = method.solve(s.getSolution());
+		this.setSolution(sol);
 	}
 
 	// -----------------------------

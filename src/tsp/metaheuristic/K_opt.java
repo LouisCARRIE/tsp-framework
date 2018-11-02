@@ -1,20 +1,30 @@
-package tsp.heuristic;
+package tsp.metaheuristic;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tsp.Instance;
 import tsp.Solution;
-import tsp.heuristic.*;
 
 import tsp.util.Voisins;
 
-public class K_opt extends AHeuristic{
+public class K_opt extends AMetaheuristic{
 
 	public K_opt(Instance instance) throws Exception {
 		super(instance, "K_opt");
 	}
 	
+	/**
+	 * Reverse. On renvoie la liste l dans laquelle on a échangé les sous-listes l[i:j] et l[k:l].
+	 * Exemple : reverse([0, 1, 2, 3, 4, 5, 6, 7, 8], 1, 3, 5, 6) renvoie [0, 5, 6, 4, 1, 2, 3, 7, 8].
+	 *
+	 * @param l : la liste que l'on va modifier
+	 * @param i : l'indice de debut de la premiere sous-liste
+	 * @param j : l'indice de fin de la premiere sous-liste
+	 * @param k : l'indice de fin de la seconde sous-liste
+	 * @param l : l'indice de fin de la seconde sous-liste
+	 * @return la nouvelle liste
+	 */
 	public List<Integer> inverser(List<Integer> liste, int i, int j, int k, int l) {
 		List<Integer> res = new ArrayList<Integer>();
 		int ind = 0;
@@ -33,6 +43,16 @@ public class K_opt extends AHeuristic{
 		return res;
 	}
 	
+	
+	/**
+	 * Reverse. On renvoie la liste l dans laquelle on a retourne la sous-liste allant de l'indice i à j.
+	 * Exemple : reverse([0, 1, 2, 3, 4, 5, 6, 7, 8], 2, 5) renvoie [0, 1, 5, 4, 3, 2, 6, 7, 8].
+	 *
+	 * @param l : la liste que l'on va modifier
+	 * @param i : l'indice de debut
+	 * @param j : l'indice de fin
+	 * @return la nouvelle liste
+	 */
 	public List<Integer> reverse(List<Integer> l, int i, int j) {
 		List<Integer> res = new ArrayList<Integer>();
 		int k = 0;
@@ -47,6 +67,14 @@ public class K_opt extends AHeuristic{
 		return res;
 	}
 	
+	/**
+	 * Cost.
+	 *
+	 * @param instance the instance
+	 * @param solution the solution
+	 * @return le coût du tour/solution
+	 * @throws Exception the exception
+	 */
 	public long cost(Instance instance, List<Integer> solution) throws Exception {
 		long c = 0;
 		for(int i = 0; i < solution.size(); i++) {
@@ -55,6 +83,16 @@ public class K_opt extends AHeuristic{
 		return c;
 	}
 	
+	/**
+	 * Two opt. On retire 2 aretes à notre chemin/solution et on essaie de trouver une nouvelle 
+	 * reconnection qui améliore le tour.
+	 *
+	 * @param instance the instance
+	 * @param sol : la solution initiale que l'on va améliorer (sol peut être la solution de plusProcheVoisin ...)
+	 * @param v : liste des voisins (v.get(i) renvoie les plus proches voisins de la ville i)
+	 * @return la solution amélioré par l'algo 2-opt
+	 * @throws Exception the exception
+	 */
 	public List<Integer> two_opt(Instance instance, List<Integer> sol, Voisins v) throws Exception {
 		List<Integer> solution = sol;
 		boolean amelioration = true;
@@ -89,6 +127,13 @@ public class K_opt extends AHeuristic{
 		return solution;
 	}
 	
+	/**
+	 * Union.
+	 *
+	 * @param l1 
+	 * @param l2
+	 * @return l'union des elements des deux listes l1 et l2
+	 */
 	public List<Integer> union(List<Integer> l1, List<Integer> l2){
 		List<Integer> l = new ArrayList<Integer>(l1);
 		for (int e : l2) {
@@ -99,6 +144,16 @@ public class K_opt extends AHeuristic{
 		return l;
 	}
 	
+	/**
+	 * Three opt. On retire 3 aretes à notre chemin/solution et on essaie de trouver une nouvelle 
+	 * reconnection qui améliore le tour.
+	 *
+	 * @param instance the instance
+	 * @param sol : la solution initiale que l'on va améliorer (sol peut être la solution de plusProcheVoisin ...)
+	 * @param v : liste des voisins (v.get(i) renvoie les plus proches voisins de la ville i)
+	 * @return la solution amélioré par l'algo 3-opt
+	 * @throws Exception the exception
+	 */
 	public List<Integer> three_opt(Instance instance, List<Integer> sol, Voisins v) throws Exception {
 		List<Integer> solution = sol;
 		boolean amelioration = true;
@@ -120,7 +175,6 @@ public class K_opt extends AHeuristic{
 					}
 					for (int l : union) {
 						int l_index = solution.indexOf(l);
-						int l1_index = (l_index + 1)%instance.getNbCities();
 						
 						int k1 = solution.get((k_index+1)%instance.getNbCities());
 						int i1 = solution.get((i_index+1)%instance.getNbCities());
@@ -158,17 +212,6 @@ public class K_opt extends AHeuristic{
 								}
 							}
 							if (cost(this.m_instance, solution) > cost(this.m_instance, cop)) {
-								/*System.out.println(cost(this.m_instance, cop));
-								System.out.println(cost(this.m_instance, solution));
-								System.out.println(cop);
-								System.out.println(solution);
-								System.out.println(d3 < d0);
-								System.out.println(d2 < d0);
-								System.out.println(d1 < d0);
-								System.out.println(d4 < d0);
-								System.out.println(i_index);
-								System.out.println(k_index);
-								System.out.println(l_index);*/
 								solution = cop;
 								stop = true;
 								break;
@@ -185,6 +228,16 @@ public class K_opt extends AHeuristic{
 		return solution;
 	}
 	
+	/**
+	 * Four opt. On retire 4 aretes à notre chemin/solution et on essaie de trouver une nouvelle 
+	 * reconnection qui améliore le tour.
+	 *
+	 * @param instance the instance
+	 * @param sol : la solution initiale que l'on va améliorer (sol peut être la solution de plusProcheVoisin ...)
+	 * @param v : liste des voisins (v.get(i) renvoie les plus proches voisins de la ville i)
+	 * @return la solution amélioré par l'algo 4-opt
+	 * @throws Exception the exception
+	 */
 	public List<Integer> four_opt(Instance instance, List<Integer> sol, Voisins v) throws Exception {
 		List<Integer> solution = sol;
 		boolean amelioration = true;
@@ -216,7 +269,6 @@ public class K_opt extends AHeuristic{
 						}
 						for (int l : union1) {
 							int l_index = solution.indexOf(l);
-							int l1_index = (l_index + 1)%instance.getNbCities();
 							int l1 = solution.get((l_index+1)%instance.getNbCities());
 							
 							
@@ -431,6 +483,13 @@ public class K_opt extends AHeuristic{
 		return solution;
 	}
 	
+	/**
+	 * Egal. Test si deux listes sont egales
+	 *
+	 * @param l1
+	 * @param l2
+	 * @return true si les deux listes sont de memes tailles et possedent les memes elements dans le meme ordre
+	 */
 	public boolean egal(List<Integer> l1, List<Integer> l2) {
 		if (l1.size() != l2.size()) {
 			return false;
@@ -443,6 +502,18 @@ public class K_opt extends AHeuristic{
 			return true;
 		}
 	}
+	
+	/**
+	 * K opt. On améliore la solution en lui appliquant en cascade les algo 2-opt, 3-opt et 4-opt.
+	 * Tant qu'il y a des améliorations, on fait tourner 2-opt puis 3-opt. Quand il n'y a plus d'amélioration
+	 * on fait tourner 4-opt et on recommence l'étape précédente si 4-opt a amélioré la solution.
+	 *
+	 * @param instance the instance
+	 * @param sol : la solution initiale que l'on va améliorer (sol peut être la solution de plusProcheVoisin ...)
+	 * @param v : liste des voisins (v.get(i) renvoie les plus proches voisins de la ville i)
+	 * @return la solution améliorer par l'algo K-opt
+	 * @throws Exception the exception
+	 */
 	public List<Integer> k_opt(Instance instance, List<Integer> sol, Voisins v) throws Exception{
 		List<Integer> solution = two_opt(this.m_instance, sol, v);;
 		List<Integer> solution1 = sol;
@@ -469,16 +540,23 @@ public class K_opt extends AHeuristic{
 		return solution;
 	}
 	
+	
 	@Override
-	public void solve() throws Exception {
-		PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
-		s.solve();
+	public Solution solve(Solution s) throws Exception {
+		
+			
 		List<Integer> solution = new ArrayList<Integer>();
 		for (int i = 0; i < this.m_instance.getNbCities(); i++) {
-			solution.add(s.getSolution().getCity(i));
+			solution.add(s.getCity(i));
 		}
+		
+		
+		
 		//int m = this.m_instance.getNbCities();
 		int m = 40;
+		
+		
+		
 		//On récupère la liste des m plus proches voisins pour chaque node
 		Voisins v = new Voisins(this.m_instance, m);
 		
@@ -491,11 +569,9 @@ public class K_opt extends AHeuristic{
 			}
 		}
 		
-		//solution = two_opt(this.m_instance, solution, v);
-		//solution = three_opt(this.m_instance, solution, v);
-		//solution = four_opt(this.m_instance, solution, v);
 		
 		solution = k_opt(this.m_instance, solution, v);
+		
 		
 		solution.add(solution.get(0));
 		Solution sol = new Solution(this.m_instance);
@@ -504,7 +580,6 @@ public class K_opt extends AHeuristic{
 			sol.setCityPosition(i, k);
 			k++;
 		}
-		this.m_solution = sol;
-		
+		return sol;
 	}
 }
