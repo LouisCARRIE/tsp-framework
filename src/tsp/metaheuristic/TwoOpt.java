@@ -29,15 +29,12 @@ public class TwoOpt extends AMetaheuristic {
 		
 	}
 	
-	public List<int[]> genererVoisinage(int[] individu) throws Exception {
+	public List<int[]> genererVoisinagePartiel(int[] individu) throws Exception {
 		//on choisit un voisinage par inversion de couples d'indices
 		List<int[]> voisinage = new ArrayList<int[]>();
-		for (int i=1 ; i<individu.length-1 ; i++) {
-			for (int j=i+1 ; j<individu.length-1 ; j++) {
-					int[] voisin = copyOf(individu);
-					echangerVilles(voisin, i, j);
-					voisinage.add(voisin);
-			}
+		for (int i=0 ; i<10 ; i++) {
+			int [] voisin = TwoOpt(individu);
+			voisinage.add(voisin);
 		}
 		return voisinage;
 	}
@@ -52,6 +49,7 @@ public class TwoOpt extends AMetaheuristic {
 		}
 		return meilleureSolution;
 	}
+	
 	
 	public int[] TwoOpt(int[] individu) throws Exception {
 		//methode "2 opt"
@@ -124,7 +122,7 @@ public class TwoOpt extends AMetaheuristic {
 		double delta = Double.MAX_VALUE;
 		//for (int i = 0 ; i<10 ; i++) {
 		while (delta>0) {
-			int[] voisin = meilleureSolutionVoisinage(genererVoisinage(individu));
+			int[] voisin = meilleureSolutionVoisinage(genererVoisinagePartiel(individu));
 			delta = evaluateIndividu(individu) - evaluateIndividu(voisin);
 			if (delta>0) {
 				individu = voisin;
