@@ -6,13 +6,23 @@ import java.util.List;
 import tsp.Instance;
 import tsp.Solution;
 
-import tsp.heuristic.*;
-
 public class TwoOpt extends AMetaheuristic {
 
 	public TwoOpt(Instance instance) throws Exception {
 		super(instance, "2_Opt");
-		// TODO Auto-generated constructor stub
+	}
+	
+	public static void echangerVilles(int[] tab, int i, int j) throws Exception  {
+		// i, j les positions des villes visitees tab[i] est la ieme ville visitee
+		if (i<=0||i>=tab.length-1) {
+			throw new Exception("indice(s) non valide(s)");
+		} else if (j<=0||j>=tab.length-1) {
+			throw new Exception("indice(s) non valide(s)");
+		} else {
+			int k = tab[i];
+			tab[i] = tab[j];
+			tab[j] = k;
+		}
 	}
 	
 	public int[] genererIndividu() throws Exception {
@@ -31,18 +41,18 @@ public class TwoOpt extends AMetaheuristic {
 	
 	public List<int[]> genererVoisinagePartiel(int[] individu) throws Exception {
 		//on choisit un voisinage par inversion de couples d'indices
-		List<int[]> voisinage = new ArrayList<int[]>();
-		for (int i=0 ; i<10 ; i++) {
-			int [] voisin = TwoOpt(individu);
-			voisinage.add(voisin);
+		List<int[]> voisinagePartiel = new ArrayList<int[]>();
+		for (int i=0 ; i<10000 ; i++) {
+			int [] voisin = Two_Opt(individu);
+			voisinagePartiel.add(voisin);
 		}
-		return voisinage;
+		return voisinagePartiel;
 	}
 	
 	
-	public int[] meilleureSolutionVoisinage(List<int[]> voisinage) throws Exception {
-		int[] meilleureSolution = voisinage.get(0);
-		for (int[] element : voisinage) {
+	public int[] meilleureSolutionVoisinage(List<int[]> voisinagePartiel) throws Exception {
+		int[] meilleureSolution = voisinagePartiel.get(0);
+		for (int[] element : voisinagePartiel) {
 			if (evaluateIndividu(element)<evaluateIndividu(meilleureSolution)) {
 				meilleureSolution = element;
 			}
@@ -51,7 +61,7 @@ public class TwoOpt extends AMetaheuristic {
 	}
 	
 	
-	public int[] TwoOpt(int[] individu) throws Exception {
+	public int[] Two_Opt(int[] individu) throws Exception {
 		//methode "2 opt"
 		int c1 = 1 + (int) (Math.random()*(individu.length-2));
 		int c2;
@@ -86,13 +96,6 @@ public class TwoOpt extends AMetaheuristic {
 		}
 	}
 	
-	public static int[] copyOf(int[] individu) {
-		int[] copyOfIndividu = new int[individu.length];
-		for (int i=0 ; i<individu.length ; i++) {
-			copyOfIndividu[i] = individu[i];
-		}
-		return copyOfIndividu;
-	}
 	
 	public int evaluateIndividu(int[] individu) throws Exception {
 	//recopie du code de evaluate() de Solution car evaluate() ne s'applique qu'à des objets
@@ -103,20 +106,6 @@ public class TwoOpt extends AMetaheuristic {
 		}
 		return m_objectiveValue;
 	}
-	
-	public static void echangerVilles(int[] tab, int i, int j) throws Exception  {
-		// i, j les positions des villes visitees tab[i] est la ieme ville visitee
-		if (i<=0||i>=tab.length-1) {
-			throw new Exception("indice(s) non valide(s)");
-		} else if (j<=0||j>=tab.length-1) {
-			throw new Exception("indice(s) non valide(s)");
-		} else {
-			int k = tab[i];
-			tab[i] = tab[j];
-			tab[j] = k;
-		}
-	}
-	
 	
 	public int[] localSearch2_Opt(int[] individu) throws Exception {
 		double delta = Double.MAX_VALUE;

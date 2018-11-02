@@ -126,8 +126,6 @@ public class TSPSolver {
 		Solution s = opt.solve(new Solution(m_instance));
 		this.setSolution(s);*/
 		
-		
-		
 		/*On choisit une heuristique qui donne une solution approchée en premier lieu
 		 * C'est cette solution que l'on va améliorer*/
 		PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
