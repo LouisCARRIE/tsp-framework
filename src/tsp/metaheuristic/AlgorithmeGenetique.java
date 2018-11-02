@@ -6,15 +6,31 @@ import java.util.List;
 import tsp.Instance;
 import tsp.Solution;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AlgorithmeGenetique.
+ */
 public class AlgorithmeGenetique extends AMetaheuristic {
 	
 	//JAutoDoc
 
+	/**
+	 * Instantiates a new algorithme genetique.
+	 *
+	 * @param instance the instance
+	 * @throws Exception the exception
+	 */
 	public AlgorithmeGenetique(Instance instance) throws Exception {
 		super(instance, "AlgorithmeGenetique");
 	}
 	
 	
+	/**
+	 * Generer individu.
+	 *
+	 * @return the int[]
+	 * @throws Exception the exception
+	 */
 	//partir de indiv = plusProcheVoisin puis faire les modifications
 	public int[] genererIndividu() throws Exception {
 		//génère aléatoirement un chemin 
@@ -31,6 +47,12 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Generer individu semi aleatoirement.
+	 *
+	 * @return the int[]
+	 * @throws Exception the exception
+	 */
 	public int[] genererIndividuSemiAleatoirement() throws Exception {
 		int[] individu = new int[this.m_instance.getNbCities() + 1];
 		for (int i = 1 ; i<this.m_instance.getNbCities() ; i++) {
@@ -50,6 +72,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Generer population.
+	 *
+	 * @param n the n
+	 * @return the int[][]
+	 * @throws Exception the exception
+	 */
 	public int[][] genererPopulation(int n) throws Exception {
 		//n = taille de la population ; n>=log(l) avec l la taille d'un invididu
 		//attention : nombre d'individus pair ?
@@ -61,6 +90,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Generer population semi aleatoirement.
+	 *
+	 * @param n the n
+	 * @return the int[][]
+	 * @throws Exception the exception
+	 */
 	public int[][] genererPopulationSemiAleatoirement(int n) throws Exception {
 		//n = taille de la population ; n>=log(l) avec l la taille d'un invididu
 		//attention : nombre d'individus pair ?
@@ -72,6 +108,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Selection sous ensemble population.
+	 *
+	 * @param population the population
+	 * @return the int[][]
+	 * @throws Exception the exception
+	 */
 	public int[][] selectionSousEnsemblePopulation(int[][] population) throws Exception {
 		//selection par tournoi
 		int m = 10; //m pair !
@@ -90,6 +133,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Cross over.
+	 *
+	 * @param selectionSousEnsemblePopulation the selection sous ensemble population
+	 * @return the int[][]
+	 * @throws Exception the exception
+	 */
 	public static int[][] crossOver(int[][] selectionSousEnsemblePopulation) throws Exception {
 		int[][] populationenfant = new int[selectionSousEnsemblePopulation.length][1];
 		double probadhybridation = 0.66;
@@ -113,6 +163,12 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Mutation individu.
+	 *
+	 * @param individu the individu
+	 * @throws Exception the exception
+	 */
 	public static void mutationIndividu(int[] individu) throws Exception {
 		//methode "2 echanges consecutifs"
 		int i = 1 + (int) (Math.random()*(individu.length-3));
@@ -121,6 +177,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Mutation individu 2 opt.
+	 *
+	 * @param individu the individu
+	 * @return the int[]
+	 * @throws Exception the exception
+	 */
 	public static int[] mutationIndividu2opt(int[] individu) throws Exception {
 		//methode "2 opt"
 		int c1 = 1 + (int) (Math.random()*(individu.length-2));
@@ -132,6 +195,12 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Mutation population enfant.
+	 *
+	 * @param populationEnfant the population enfant
+	 * @throws Exception the exception
+	 */
 	public static void mutationPopulationEnfant(int[][] populationEnfant) throws Exception {
 		for (int i=0 ; i<populationEnfant.length ; i++) {
 			double r = Math.random();
@@ -143,6 +212,12 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Mutation population enfant 2 opt.
+	 *
+	 * @param populationEnfant the population enfant
+	 * @throws Exception the exception
+	 */
 	public static void mutationPopulationEnfant2opt(int[][] populationEnfant) throws Exception {
 		for(int i=0 ; i<populationEnfant.length ; i++) {
 			double r = Math.random();
@@ -154,6 +229,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Nouvelle population.
+	 *
+	 * @param population the population
+	 * @param populationenfant the populationenfant
+	 * @throws Exception the exception
+	 */
 	public void nouvellePopulation(int[][] population, int[][] populationenfant) throws Exception {
 		for (int i=0 ; i<populationenfant.length ; i++) {
 			int indicePireIndividu = indicePireIndividu(population);
@@ -162,6 +244,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Meilleur individu.
+	 *
+	 * @param population the population
+	 * @return the int[]
+	 * @throws Exception the exception
+	 */
 	public int[] meilleurIndividu(int[][] population) throws Exception {
 		int indicemeilleurindiv = 0;
 		for(int i=1 ; i<population.length ; i++) {
@@ -173,6 +262,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Indice pire individu.
+	 *
+	 * @param population the population
+	 * @return the int
+	 * @throws Exception the exception
+	 */
 	public int indicePireIndividu(int[][] population) throws Exception {
 		int indicePireIndividu= 0;
 		for(int i=1 ; i<population.length ; i++) {
@@ -184,6 +280,14 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Echanger villes.
+	 *
+	 * @param tab the tab
+	 * @param i the i
+	 * @param j the j
+	 * @throws Exception the exception
+	 */
 	public static void echangerVilles(int[] tab, int i, int j) throws Exception  {
 		// i, j les positions des villes visitees tab[i] est la ieme ville visitee
 		if (i<=0||i>=tab.length-1) {
@@ -198,6 +302,14 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Trouver ville.
+	 *
+	 * @param tab the tab
+	 * @param i the i
+	 * @return the int
+	 * @throws Exception the exception
+	 */
 	public static int trouverVille(int[] tab, int i) throws Exception  {
 		//i est la ville qu'on veut changer
 		if (i<=0||i>=tab.length-1) {
@@ -212,6 +324,14 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Echanger villes 2.
+	 *
+	 * @param tab the tab
+	 * @param i the i
+	 * @param j the j
+	 * @throws Exception the exception
+	 */
 	public static void echangerVilles2(int[] tab, int i, int j) throws Exception  {
 		//i, j sont les villes qu'on veut changer
 		if (i<=0||i>=tab.length-1) {
@@ -227,6 +347,12 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 		
+	/**
+	 * Copy of.
+	 *
+	 * @param individu the individu
+	 * @return the int[]
+	 */
 	public static int[] copyOf(int[] individu) {
 		int[] copyOfIndividu = new int[individu.length];
 		for (int i=0 ; i<individu.length ; i++) {
@@ -236,6 +362,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Evaluate individu.
+	 *
+	 * @param individu the individu
+	 * @return the int
+	 * @throws Exception the exception
+	 */
 	public int evaluateIndividu(int[] individu) throws Exception {
 	//recopie du code de evaluate() de Solution car evaluate() ne s'applique qu'à des objets
 	//de type solution ; renvoie int ou double ???
@@ -248,6 +381,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	
 	
 
+	/**
+	 * Individu au hasard.
+	 *
+	 * @param population the population
+	 * @return the int[]
+	 * @throws Exception the exception
+	 */
 	public static int[] individuAuHasard(int[][] population) throws Exception {
 		//selection par tournoi
 		int r = (int) (Math.random()*population.length);
@@ -256,6 +396,15 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Annexe.
+	 *
+	 * @param individu1 the individu 1
+	 * @param individu2 the individu 2
+	 * @param c the c
+	 * @return the int[]
+	 * @throws Exception the exception
+	 */
 	public static int[] annexe(int[] individu1, int[] individu2, int c) throws Exception {
 		if ((individu1.length!=individu2.length)) {
 			throw new Exception("les tailles des parents ne sont pas les memes");
@@ -280,6 +429,14 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 
 	}
 	
+	/**
+	 * Est present.
+	 *
+	 * @param individu the individu
+	 * @param entier the entier
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
 	public static boolean estPresent(int[] individu, int entier) throws Exception {
 		int i = 0;
 		while (i<individu.length&&individu[i]!=entier) {
@@ -289,6 +446,15 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 
 	}
 	
+	/**
+	 * Copy ordre different.
+	 *
+	 * @param individu the individu
+	 * @param c1 the c 1
+	 * @param c2 the c 2
+	 * @return the int[]
+	 * @throws Exception the exception
+	 */
 	public static int[] copyOrdreDifferent(int[] individu, int c1, int c2) throws Exception {
 		if ((c1<=0)||(c1>=(individu.length-1))||(c2<=0)||(c2>=(individu.length-1))||(c1==c2)||(c1==(c2+1))||(c2==(c1+1))) {
 			throw new Exception("les indices sont non valides");
@@ -314,6 +480,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 		}
 	}
 	
+	/**
+	 * Generer voisinage.
+	 *
+	 * @param individu the individu
+	 * @return the list
+	 * @throws Exception the exception
+	 */
 	public List<int[]> genererVoisinage(int[] individu) throws Exception {
 		//on choisit un voisinage par inversion de couples d'indices
 		List<int[]> voisinage = new ArrayList<int[]>();
@@ -328,6 +501,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Meilleure solution voisinage.
+	 *
+	 * @param voisinage the voisinage
+	 * @return the int[]
+	 * @throws Exception the exception
+	 */
 	public int[] meilleureSolutionVoisinage(List<int[]> voisinage) throws Exception {
 		int[] meilleureSolution = voisinage.get(0);
 		for (int[] element : voisinage) {
@@ -339,6 +519,13 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
+	/**
+	 * Local search.
+	 *
+	 * @param individu the individu
+	 * @return the int[]
+	 * @throws Exception the exception
+	 */
 	public int[] localSearch(int[] individu) throws Exception {
 		double delta = Double.MAX_VALUE;
 		//for (int i = 0 ; i<10 ; i++) {
@@ -354,6 +541,9 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see tsp.metaheuristic.AMetaheuristic#solve(tsp.Solution)
+	 */
 	@Override
 	public Solution solve(Solution sol) throws Exception {
 		
