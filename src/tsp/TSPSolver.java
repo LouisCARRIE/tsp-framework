@@ -7,7 +7,7 @@ import tsp.heuristic.ColonieDeFourmis;
 import tsp.heuristic.K_opt;
 import tsp.heuristic.PlusProcheVoisin;
 import tsp.metaheuristic.LocalSearchSwap;
-import tsp.metaheuristic.TwoOptAmeliore;
+import tsp.metaheuristic.TwoOpt;
 import tsp.metaheuristic.AlgorithmeGenetique;
 
 /**

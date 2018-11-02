@@ -8,10 +8,10 @@ import tsp.Solution;
 
 import tsp.heuristic.*;
 
-public class TwoOptAmeliore extends AMetaheuristic {
+public class TwoOpt extends AMetaheuristic {
 
-	public TwoOptAmeliore(Instance instance) throws Exception {
-		super(instance, "2-opt");
+	public TwoOpt(Instance instance) throws Exception {
+		super(instance, "2_Opt");
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -120,7 +120,7 @@ public class TwoOptAmeliore extends AMetaheuristic {
 	}
 	
 	
-	public int[] localSearchTwoOpt(int[] individu) throws Exception {
+	public int[] localSearch2_Opt(int[] individu) throws Exception {
 		double delta = Double.MAX_VALUE;
 		//for (int i = 0 ; i<10 ; i++) {
 		while (delta>0) {
@@ -138,7 +138,7 @@ public class TwoOptAmeliore extends AMetaheuristic {
 	@Override
 	public Solution solve(Solution sol) throws Exception {
 		int[] individu = genererIndividu();
-		individu = localSearchTwoOpt(individu);
+		individu = localSearch2_Opt(individu);
 		for (int i = 0; i<individu.length ; i++) {
 			sol.setCityPosition(individu[i], i);
 		}
