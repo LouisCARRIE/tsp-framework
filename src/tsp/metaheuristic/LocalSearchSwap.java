@@ -85,15 +85,17 @@ public class LocalSearchSwap extends AMetaheuristic {
 	
 	
 	/**
-	 * Generer voisinage par inversion de couples d'indices
+	 * Generer voisinage.
+	 * Genere le voisinage d'un chemin individu par
+	 * inversion de couples d'indices du chemin individu
 	 * 
 	 *
-	 * @param individu the individu
-	 * @return voisinage : la liste
+	 * @param individu : le chemin sous forme de tableau pour lequel on genere le voisinage
+	 * @return voisinage : la liste de tableaux des voisins de individu obtenue par inversion 
+	 * 					   de couples d'indices de individu
 	 * @throws Exception the exception
 	 */
 	public List<int[]> genererVoisinage(int[] individu) throws Exception {
-		//on choisit un voisinage par inversion de couples d'indices
 		List<int[]> voisinage = new ArrayList<int[]>();
 		for (int i=1 ; i<individu.length-1 ; i++) {
 			for (int j=i+1 ; j<individu.length-1 ; j++) {
@@ -145,10 +147,12 @@ public class LocalSearchSwap extends AMetaheuristic {
 	
 	/**
 	 * Local search swap.
-	 * Remplace la solution courante par la meilleure choisie dans le voisinage de la solution courante
-	 * La recherche s’arrete lorsqu’aucune nouvelle meilleure solution n'est trouvee.
+	 * Remplace la solution courante par la meilleure solution choisie dans le voisinage 
+	 * de la solution courante
+	 * La recherche s’arrete lorsqu’aucune nouvelle meilleure solution n'est trouvee
 	 *
-	 * @param individu : le chemin actuellement emprunte par le voyageur de commerce
+	 * @param individu : le chemin sous forme de tableau actuellement emprunte 
+	 					 par le voyageur de commerce
 	 * @return l'optimum local au sens du Swap
 	 * @throws Exception the exception
 	 */
