@@ -1,12 +1,9 @@
 package tsp.metaheuristic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import tsp.Instance;
 import tsp.Solution;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class AlgorithmeGenetique.
  */
@@ -167,13 +164,12 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	public int[][] collisionCrossOver(int[][] selectionSousEnsemblePopulation) throws Exception {
 		int[][] populationenfant = new int[selectionSousEnsemblePopulation.length][1];
 		double probadhybridation = 0.66;
-		int n = selectionSousEnsemblePopulation[0].length;
 		for (int i=0 ; i<selectionSousEnsemblePopulation.length-1 ; i+=2) {
 			
 			double r = Math.random(); //r entre 0 inclus et 1 exclus --> il faut les 2 inclus !!	
 			if (r<=probadhybridation) {
-				populationenfant[i] = collision1(selectionSousEnsemblePopulation[i], selectionSousEnsemblePopulation[i+1]);
-				populationenfant[i+1] = collision2(selectionSousEnsemblePopulation[i+1], selectionSousEnsemblePopulation[i]);		
+				populationenfant[i] = collisionEnfant1(selectionSousEnsemblePopulation[i], selectionSousEnsemblePopulation[i+1]);
+				populationenfant[i+1] = collisionEnfant2(selectionSousEnsemblePopulation[i+1], selectionSousEnsemblePopulation[i]);		
 			} else {
 				populationenfant[i] = copyOf(selectionSousEnsemblePopulation[i]);
 				populationenfant[i+1] = copyOf(selectionSousEnsemblePopulation[i+1]);
@@ -518,14 +514,15 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	
-	public int[] collision1(int[] individu1, int[] individu2) throws Exception {
+	public int[] collisionEnfant1(int[] individu1, int[] individu2) throws Exception {
 		int[] enfant1 = new int[individu1.length];
 		for (int i=1 ; i<enfant1.length-1 ; i++) {
 			double v1 = (tableauMassesChromosomesIndividu(individu1)[i] - tableauMassesChromosomesIndividu(individu2)[i])*velociteChromosomesIndividu(individu1)
 					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i])
 					 + 2*tableauMassesChromosomesIndividu(individu2)[i]*velociteChromosomesIndividu(individu2)
 					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i]);
-			if (v1<=0) {
+			System.out.println("v1 vaut " + v1);	
+			if (v1>=0) {
 				enfant1[i] = individu1[i];
 			}
 		}
@@ -539,15 +536,15 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	
 	
 	
-	public int[] collision2(int[] individu1, int[] individu2) throws Exception {
+	public int[] collisionEnfant2(int[] individu1, int[] individu2) throws Exception {
 		int[] enfant2 = new int[individu1.length];
 		for (int i=1 ; i<enfant2.length-1 ; i++) {
 			double v2 = 2*tableauMassesChromosomesIndividu(individu1)[i]*velociteChromosomesIndividu(individu1)
 					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i])
 					 - (tableauMassesChromosomesIndividu(individu1)[i] - tableauMassesChromosomesIndividu(individu2)[i])*velociteChromosomesIndividu(individu2)
 					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i]);
-					 
-			if (v2<=0) {
+			System.out.println("v2 vaut " + v2);		 
+			if (v2>=0) {
 				enfant2[i] = individu2[i];
 			}
 		}
@@ -567,67 +564,6 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 		}
 		return individu2[i];
 	}
-	
-	/**
-	 * Generer voisinage.
-	 *
-	 * @param individu the individu
-	 * @return the list
-	 * @throws Exception the exception
-	 */
-	public List<int[]> genererVoisinage(int[] individu) throws Exception {
-		//on choisit un voisinage par inversion de couples d'indices
-		List<int[]> voisinage = new ArrayList<int[]>();
-		for (int i=1 ; i<individu.length-1 ; i++) {
-			for (int j=i+1 ; j<individu.length-1 ; j++) {
-					int[] voisin = copyOf(individu);
-					echangerVilles(voisin, i, j);
-					voisinage.add(voisin);
-			}
-		}
-		return voisinage;
-	}
-	
-	
-	/**
-	 * Meilleure solution voisinage.
-	 *
-	 * @param voisinage the voisinage
-	 * @return the int[]
-	 * @throws Exception the exception
-	 */
-	public int[] meilleureSolutionVoisinage(List<int[]> voisinage) throws Exception {
-		int[] meilleureSolution = voisinage.get(0);
-		for (int[] element : voisinage) {
-			if (evaluateIndividu(element)<evaluateIndividu(meilleureSolution)) {
-				meilleureSolution = element;
-			}
-		}
-		return meilleureSolution;
-	}
-	
-	
-	/**
-	 * Local search.
-	 *
-	 * @param individu the individu
-	 * @return the int[]
-	 * @throws Exception the exception
-	 */
-	public int[] localSearch(int[] individu) throws Exception {
-		double delta = Double.MAX_VALUE;
-		//for (int i = 0 ; i<10 ; i++) {
-		while (delta>0) {
-			int[] voisin = meilleureSolutionVoisinage(genererVoisinage(individu));
-			delta = evaluateIndividu(individu) - evaluateIndividu(voisin);
-			if (delta>0) {
-				individu = voisin;
-			}
-		}
-		return individu;
-		
-	}
-
 
 	/* (non-Javadoc)
 	 * @see tsp.metaheuristic.AMetaheuristic#solve(tsp.Solution)
@@ -641,11 +577,11 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 		
 		//population = genererPopulation(1000);
 		
-		for (int i=0 ; i<100000 ; i++) {
-		//for (int i=0 ; i<1000 ; i++) {
+		//for (int i=0 ; i<100000 ; i++) {
+		for (int i=0 ; i<10000 ; i++) {
 			int [][] selectionSousEnsemblePopulation = selectionSousEnsemblePopulation(population);
-			int [][] populationEnfant = crossOver(selectionSousEnsemblePopulation);
-			//int [][] populationEnfant = collisionCrossOver(selectionSousEnsemblePopulation);
+			//int [][] populationEnfant = crossOver(selectionSousEnsemblePopulation);
+			int [][] populationEnfant = collisionCrossOver(selectionSousEnsemblePopulation);
 			mutationPopulationEnfant2opt(populationEnfant);
 			nouvellePopulation(population, populationEnfant);
 			
