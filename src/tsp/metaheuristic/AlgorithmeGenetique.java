@@ -365,7 +365,6 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i])
 					 + 2*tableauMassesChromosomesIndividu(individu2)[i]*velociteChromosomesIndividu(individu2)
 					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i]);
-			System.out.println("v1 vaut " + v1);	
 			if (v1<=0) {
 				enfant1[i] = individu1[i];
 			}
@@ -412,8 +411,7 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 			double v2 = 2*tableauMassesChromosomesIndividu(individu1)[i]*velociteChromosomesIndividu(individu1)
 					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i])
 					 - (tableauMassesChromosomesIndividu(individu1)[i] - tableauMassesChromosomesIndividu(individu2)[i])*velociteChromosomesIndividu(individu2)
-					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i]);
-			System.out.println("v2 vaut " + v2);		 
+					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i]);	 
 			if (v2<=0) {
 				enfant2[i] = individu2[i];
 			}
