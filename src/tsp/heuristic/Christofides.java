@@ -16,7 +16,7 @@ public class Christofides extends AHeuristic{
 	
 	
 	/**
-	 * Instantiates a new christofides.
+	 * Instantiates a new Christofides.
 	 *
 	 * @param instance the instance
 	 * @throws Exception the exception
