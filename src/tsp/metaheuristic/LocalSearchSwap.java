@@ -30,6 +30,8 @@ public class LocalSearchSwap extends AMetaheuristic {
 	 * Echanger villes. 
 	 * Echange dans un chemin emprunte par le voyageur de commerce 
 	 * les villes visitees en i-eme et j-ieme positions.
+	 * Exemple : si tab = [0, 2, 1, 3, 0] alors apres l'appel
+	 			echangerVilles(tab, 2, 3), tab = [0, 2, 3, 1, 0] 
 	 *
 	 * @param tab : un chemin possible pour le voyageur de commerce
 	 * @param i : indice tel que tab[i] correspond a la i-eme ville visitee
@@ -37,7 +39,6 @@ public class LocalSearchSwap extends AMetaheuristic {
 	 * @throws Exception the exception
 	 */
 	public static void echangerVilles(int[] tab, int i, int j) throws Exception  {
-		// i, j les positions des villes visitees tab[i] est la ieme ville visitee
 		if (i<=0||i>=tab.length-1) {
 			throw new Exception("indice(s) non valide(s)");
 		} else if (j<=0||j>=tab.length-1) {
@@ -91,7 +92,7 @@ public class LocalSearchSwap extends AMetaheuristic {
 	 * 
 	 *
 	 * @param individu : le chemin sous forme de tableau pour lequel on genere le voisinage
-	 * @return voisinage : la liste de tableaux des voisins de individu obtenue par inversion 
+	 * @return voisinage : la liste de tableaux des voisins de individu obtenus par inversion 
 	 * 					   de couples d'indices de individu
 	 * @throws Exception the exception
 	 */
@@ -131,7 +132,8 @@ public class LocalSearchSwap extends AMetaheuristic {
 	 * Renvoie le chemin ayant le plus faible cout parmi une liste de chemins
 	 *
 	 * @param voisinage : une liste de chemins voisins (au sens du Swap) d'un autre chemin
-	 * @return meilleureSolution : le chemin ayant le plus faible cout parmi voisinage
+	 * @return meilleureSolution : le chemin ayant le plus faible cout
+	 							   parmi le voisinage voisinage
 	 * @throws Exception the exception
 	 */
 	public int[] meilleureSolutionVoisinage(List<int[]> voisinage) throws Exception {
@@ -153,7 +155,7 @@ public class LocalSearchSwap extends AMetaheuristic {
 	 *
 	 * @param individu : le chemin sous forme de tableau actuellement emprunte 
 	 					 par le voyageur de commerce
-	 * @return l'optimum local au sens du Swap
+	 * @return le chemin optimum local au sens du Swap
 	 * @throws Exception the exception
 	 */
 	public int[] localSearchSwap(int[] individu) throws Exception {
