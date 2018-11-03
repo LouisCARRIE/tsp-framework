@@ -175,8 +175,11 @@ public class LocalSearchSwap extends AMetaheuristic {
 	}
 	
 
-	/** Mise en application de l'heuristique pour construire m_solution 
-	 *  Exemple simpliste ou le sommet i est insere en position i dans la tournee.
+	/** Application de la metaheuristique sur une solution
+	 *  pour construire une solution optimale locale
+	 *  
+	 *  @return sol : la solution dont l'ordre des villes correspond a celui
+	 *  				  trouve dans le tableau individu retourne par localSearchSwap
 	 */
 	public Solution solve(Solution sol) throws Exception {
 		int[] individu = genererIndividu();

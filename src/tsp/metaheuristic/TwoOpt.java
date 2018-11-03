@@ -24,12 +24,12 @@ public class TwoOpt extends AMetaheuristic {
 	
 	/**
 	 * Echanger villes. 
-	 * Echange dans un chemin emprunte par le voyageur de commerce 
+	 * Echange, dans un chemin emprunte par le voyageur de commerce, 
 	 * les villes visitees en i-eme et j-ieme positions.
 	 * Exemple : si tab = [0, 2, 1, 3, 0] alors apres l'appel
 	 			echangerVilles(tab, 2, 3), tab = [0, 2, 3, 1, 0] 
 	 *
-	 * @param tab : un chemin possible pour le voyageur de commerce
+	 * @param tab : un chemin possible pour le voyageur de commerce sous forme de tableau
 	 * @param i : indice tel que tab[i] correspond a la i-eme ville visitee
 	 * @param j : indice tel que tab[j] correspond a la j-eme ville visitee
 	 * @throws Exception the exception
@@ -76,8 +76,7 @@ public class TwoOpt extends AMetaheuristic {
 	 * 2) Application de copyOrdreDifferent(individu, c1, c2)
 	 *
 	 * @param individu : un chemin sous forme de tableau
-	 * @return le tableau partiellement inverse par 
-	 		   rapport a individu
+	 * @return le tableau partiellement inverse par rapport a individu
 	 		   Exemple : si individu = [0, 2, 1, 4, 5, 3, 6, 0], c1 = 1, c2 = 5
 	 		             alors copyOrdreDifferent(individu, 1, 5) retourne 
 	 			         [0, 2, 5, 4, 1, 3, 6, 0]
@@ -99,7 +98,7 @@ public class TwoOpt extends AMetaheuristic {
 	 * Renvoie une copie copie du chemin individu telle que :
 	 * pour i entier dans [0, c1] : copie[i] = individu[i];
 	 * pour j entier dans [c2, individu.length-1] : copie[j] = individu[j];
-	 * on retourne le sous tableau d'indice de debut c1+1 et d'indice de fin c2-1
+	 * on retourne le sous tableau de individu d'indice de debut c1+1 et d'indice de fin c2-1
 	 * Exemple : si individu = [0, 2, 1, 4, 5, 3, 6, 0] alors
 	 			copyOrdreDifferent(individu, 1, 5) retourne 
 	 			[0, 2, 5, 4, 1, 3, 6, 0]
@@ -222,7 +221,8 @@ public class TwoOpt extends AMetaheuristic {
 	}
 	
 	
-	/** Mise en application de l'heuristique pour construire m_solution
+	/** Application de la metaheuristique sur une solution
+	 *  pour construire une solution optimale locale
 	 *  
 	 *  @return sol : la solution dont l'ordre des villes correspond a celui
 	 *  				  trouve dans le tableau individu retourne par localSearch2_opt
