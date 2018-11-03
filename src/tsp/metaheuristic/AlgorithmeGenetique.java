@@ -332,7 +332,7 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	}
 	
 	/**
-	 * Collision enfant 1
+	 * Collision enfant 1.
 	 * Cree un chemin enfant appele enfant1 a partir de la collision deux chemins
 	 * Methode inspiree de la theorie des chocs elastiques entre deux particules 
 	 * et lorsqu'on se place a une dimension
@@ -347,7 +347,10 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	 		        dans individu1 et de la ville situee en position i dans individu2
 	 		        ainsi que des masses des deux villes
 	 		 - si v1<=0, cela signifie que la ville situee en position i dans individu1
-	 		   est un "bon gene", 
+	 		   est un "bon gene" ; cette ville est a une petite distance de ses voisins
+	 		   et donc elle devrait rester a sa place pour former enfant1
+	 		 - on complete enfant1 avec les villes de individu2 qui n'apparaissent pas 
+	 		   encore dans enfant1
 	 		         
 	 * 
 	 * @param individu1 : un chemin sous forme de tableau
@@ -377,14 +380,34 @@ public class AlgorithmeGenetique extends AMetaheuristic {
 	
 	
 	/**
-	 * Collision enfant 2
-	 * @param individu1
-	 * @param individu2
-	 * @return
-	 * @throws Exception
+	 * Collision enfant 2.
+	 * Cree un chemin enfant appele enfant2 a partir de la collision deux chemins
+	 * Methode inspiree de la theorie des chocs elastiques entre deux particules 
+	 * et lorsqu'on se place a une dimension
+
+	 * Fonctionne de la maniere suivante :
+
+	 		- on cree un nouveau tableau d'entiers de meme longueur que individu2
+	 		- pour tout entier i de [1, enfant2.length-2] :
+	 		        on calcule la nouvelle velocite v2 de la ville situee en position i 
+	 		        dans individu2 apres le choc entre individu1 et individu2 ;
+	 		        v2 depend des velocites avant le choc de la ville situee en position i 
+	 		        dans individu1 et de la ville situee en position i dans individu2
+	 		        ainsi que des masses des deux villes
+	 		 - si v2<=0, cela signifie que la ville situee en position i dans individu2
+	 		   est un "bon gene" ; cette ville est a une petite distance de ses voisins
+	 		   et donc elle devrait rester a sa place pour former enfant2
+	 		 - on complete enfant2 avec les villes de individu1 qui n'apparaissent pas 
+	 		   encore dans enfant2
+	 		         
+	 * 
+	 * @param individu1 : un chemin sous forme de tableau
+	 * @param individu2 : un autre chemin sous forme de tableau
+	 * @return enfant2 : chemin issu de la collision de individu1 et individu2	
+	 * @throws Exception the exception
 	 */
 	public int[] collisionEnfant2(int[] individu1, int[] individu2) throws Exception {
-		int[] enfant2 = new int[individu1.length];
+		int[] enfant2 = new int[individu2.length];
 		for (int i=1 ; i<enfant2.length-1 ; i++) {
 			double v2 = 2*tableauMassesChromosomesIndividu(individu1)[i]*velociteChromosomesIndividu(individu1)
 					   /(tableauMassesChromosomesIndividu(individu1)[i] + tableauMassesChromosomesIndividu(individu2)[i])
