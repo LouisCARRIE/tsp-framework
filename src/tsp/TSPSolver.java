@@ -1,13 +1,14 @@
 package tsp;
 
-import tsp.heuristic.AlgorithmeGenetique;
 import tsp.heuristic.AlgorithmeGlouton;
 import tsp.heuristic.ArbreCouvrant;
 import tsp.heuristic.Christofides;
 import tsp.heuristic.ColonieDeFourmis;
-import tsp.heuristic.LocalSearch;
 import tsp.heuristic.PlusProcheVoisin;
-import tsp.metaheuristic.TwoOptAmeliore;
+import tsp.metaheuristic.LocalSearchSwap;
+import tsp.metaheuristic.TwoOpt;
+import tsp.metaheuristic.AlgorithmeGenetique;
+import tsp.metaheuristic.K_opt;
 
 /**
  * 
@@ -106,24 +107,37 @@ public class TSPSolver {
 		this.setSolution(glouton.getSolution());*/
 		
 		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
+<<<<<<< HEAD
 		genetique.solve();
 		this.setSolution(genetique.getSolution());*/
+/*=======
+		Solution s = genetique.solve(new Solution(m_instance));
+		this.setSolution(s);*/
+/*>>>>>>> branch 'master' of https://github.com/LouisCARRIE/tsp-framework*/
 		
-		/*LocalSearch localSearch = new LocalSearch(m_instance);
-		localSearch.solve();
-		this.setSolution(localSearch.getSolution());*/
+		/*LocalSearchSwap localSearchSwap = new LocalSearchSwap(m_instance);
+		Solution s = localSearchSwap.solve(new Solution(m_instance));
+		this.setSolution(s);*/
 		
 		/*Christofides Christofides = new Christofides(m_instance);
 		Christofides.solve();
 		this.setSolution(Christofides.getSolution());*/
 		
-		ColonieDeFourmis fourmis = new ColonieDeFourmis(m_instance);
+		/*ColonieDeFourmis fourmis = new ColonieDeFourmis(m_instance);
 		fourmis.solve();
-		this.setSolution(fourmis.getSolution());
+		this.setSolution(fourmis.getSolution());*/
 		
 		/*TwoOpt opt = new TwoOpt(m_instance);
 		Solution s = opt.solve(new Solution(m_instance));
 		this.setSolution(s);*/
+		
+		/*On choisit une heuristique qui donne une solution approchée en premier lieu
+		 * C'est cette solution que l'on va améliorer*/
+		/*PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
+		s.solve();
+		K_opt method = new K_opt(m_instance);
+		Solution sol = method.solve(s.getSolution());
+		this.setSolution(sol);*/
 	}
 
 	// -----------------------------

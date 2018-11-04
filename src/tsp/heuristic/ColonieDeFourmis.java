@@ -1,5 +1,7 @@
+/*
+ * 
+ */
 package tsp.heuristic;
-
 
 
 import tsp.Instance;
@@ -7,14 +9,60 @@ import tsp.Solution;
 import tsp.util.Couple;
 import tsp.util.TripletPheroDistanceVisite;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ColonieDeFourmis.
+ * @author Brendan Becaert
+ */
 
 
 public class ColonieDeFourmis extends AHeuristic  {
+	
+	
+	/**
+	 * Instantiates a new colonie de fourmis.
+	 *
+	 * @param instance the instance
+	 * @throws Exception the exception
+	 */
 
 	public ColonieDeFourmis(Instance instance) throws Exception {
 		super(instance, "Colonie de fourmis");
 		// TODO Auto-generated constructor stub
 	}
+	
+	/**
+	 * Initianilisation arretes.
+	 *
+	 * @return l'initianilisation de la liste des matrices caractéristiques de chaque fourmis.
+	 * @throws Exception the exception
+	 */
+	public  TripletPheroDistanceVisite[][][] InitianilisationArretes() throws Exception  {
+		int nbvilles = this.m_instance.getNbCities();
+		int nombreFourmis=100;
+		TripletPheroDistanceVisite[][][] Arretes = new TripletPheroDistanceVisite[nombreFourmis][nbvilles][nbvilles];
+		for (TripletPheroDistanceVisite [][] fourmis : Arretes) { 	  	    	  	   		 	
+			for (int ligne=0; ligne< fourmis.length; ligne ++) { 	  	    	  	   		 		  	    	  	   		 	
+				for (int colonne=0; colonne < fourmis[0].length; colonne++) { 	  	    	  	   		 	
+					if (ligne!=colonne) { 
+						fourmis[ligne][colonne]=new  TripletPheroDistanceVisite(5, this.m_instance.getDistances(ligne, colonne), false); 	  	    	  	   		 						
+					} 	  	    	  	   		 	 	  	    	  	   		 	
+				} 	  	    	  	   		 				 	  	    	  	   		 	
+			} 
+		
+		}
+		return Arretes;
+	}
+	
+	
+	/**
+	 * Proba ville.
+	 *
+	 * @param i indice de ville
+	 * @param j indice de ville
+	 * @param V the v
+	 * @return l'initianilisation de la liste des matrices caractéristiques de chaque fourmis.
+	 */
 	
 	public static double ProbaVille (int i, int j, TripletPheroDistanceVisite[][] V) {
 		double p =0.0;
@@ -29,6 +77,13 @@ public class ColonieDeFourmis extends AHeuristic  {
 		return p;
 		
 	}
+	
+	/**
+	 * Maj phero.
+	 *
+	 * @param V the v
+	 * @return la meme matrice avec les caractéristiques mis à jour
+	 */
 	
 	public static void MajPhero(TripletPheroDistanceVisite[][][] V ) {
 		int somme = 0;
@@ -60,6 +115,13 @@ public class ColonieDeFourmis extends AHeuristic  {
 		} 
 	}
 	
+	/**
+	 * Distance.
+	 *
+	 * @param c un tableau de villes
+	 * @return la distance parcourant le chemin passsant par les villes de c
+	 * @throws Exception the exception
+	 */
 	
 	public long distance (int[] c)throws Exception {
 		long distance=0;
@@ -70,43 +132,15 @@ public class ColonieDeFourmis extends AHeuristic  {
 		return distance;
 	}
 	
-public  TripletPheroDistanceVisite[][][] InitianilisationArretes() throws Exception  {
-	int nbvilles = this.m_instance.getNbCities();
-	int nombreFourmis=100;
-	TripletPheroDistanceVisite[][][] Arretes = new TripletPheroDistanceVisite[nombreFourmis][nbvilles][nbvilles];
-	for (TripletPheroDistanceVisite [][] fourmis : Arretes) { 	  	    	  	   		 	
-		for (int ligne=0; ligne< fourmis.length; ligne ++) { 	  	    	  	   		 		  	    	  	   		 	
-			for (int colonne=0; colonne < fourmis[0].length; colonne++) { 	  	    	  	   		 	
-				if (ligne!=colonne) { 
-					fourmis[ligne][colonne]=new  TripletPheroDistanceVisite(5, this.m_instance.getDistances(ligne, colonne), false); 	  	    	  	   		 						
-				} 	  	    	  	   		 	 	  	    	  	   		 	
-			} 	  	    	  	   		 				 	  	    	  	   		 	
-		} 
-	
-	}
-	return Arretes;
-}
 
 
-public static String toStringTab (int [] t) {
-	String s="[";
-	for ( int i : t) {
-		s+=i +"  ";
-	}
-	s+="]";
-	return s;
-}
 
-
-	public Couple[][] InitialinisationVillesFourmis(){
-		int nbvilles = this.m_instance.getNbCities();
-		int nombreFourmis=100;
-		Couple[][] VillesFourmis = new Couple[nombreFourmis][nbvilles];	  	    	  	   		 	 	  	    	  	   		 	
-	   		for (int l =0; l<nombreFourmis; l++) {
-	   			VillesFourmis[l][0]= new Couple(0,0);
-	   		}
-	   		return VillesFourmis;	   		
-	}
+	/**
+	 * Ville suivante.
+	 *
+	 * @param proba tableau de double ayant pour arguments, l'indice de la ville et la probabilité qui lui correspond
+	 * @return l'indice de la ville suivante à visiter en prenant en compte les probabilités que chaque ville soient choisies
+	 */
 	
 	public static int   VilleSuivante( double[][] proba) {
 		int nbVillesNonVisitees = proba.length;
@@ -124,12 +158,18 @@ public static String toStringTab (int [] t) {
 		return indice;
 		}
 	
+	/**
+	 * Solve.
+	 *
+	 * @return l'initianilisation de la liste des matrices caractéristiques de chaque fourmis.
+	 * @throws Exception the exception
+	 */
+	
 	@Override
 	public void solve() throws Exception {
 		long tempsIni = System.currentTimeMillis();
 		int nbvilles = this.m_instance.getNbCities();;
 		int nbFourmis=5;
-		int quantitePhero=5000;
 		TripletPheroDistanceVisite[][][] Fourmis = new TripletPheroDistanceVisite[nbFourmis][nbvilles][nbvilles]; 
   	   	
   	   	Fourmis=InitianilisationArretes();
@@ -163,7 +203,6 @@ public static String toStringTab (int [] t) {
   	   				
   	   				VilleSuivante=VilleSuivante(listeProba);  			
   	   				VillesVisitees[k]=VilleSuivante;
-  	   				System.out.println(toStringTab(VillesVisitees));
   	   			
   	   			
   	   		
@@ -175,7 +214,6 @@ public static String toStringTab (int [] t) {
   	   			}
   	   		}
   	   	}
-		System.out.println("meilleur chemin final" +toStringTab(meilleurChemin));
   	   	
   	   	//Elaboration de la solution 
   	   	Solution s = new Solution(m_instance);

@@ -5,12 +5,29 @@ import tsp.Solution;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * The Class PlusProcheVoisin.
+ * @author Thomas Bazaille
+ */
 public class PlusProcheVoisin extends AHeuristic{
 
+	/**
+	 * Instantiates a new plus proche voisin.
+	 *
+	 * @param instance the instance
+	 * @throws Exception the exception
+	 */
 	public PlusProcheVoisin(Instance instance) throws Exception {
 		super(instance, "plusProcheVoisin");
 	}
 	
+	/**
+	 * Removes l'element point dans la liste l.
+	 *
+	 * @param l the list
+	 * @param point the point
+	 * @return la liste l sans l'element point
+	 */
 	public static List<Integer> remove1(List<Integer> l, int point) {
 		List<Integer> t = new ArrayList<Integer>();
 		for(int e : l) {
@@ -24,7 +41,7 @@ public class PlusProcheVoisin extends AHeuristic{
 
 	@Override
 	public void solve() throws Exception {
-		int nbVilles = this.m_instance.getNbCities(); // super à la place de this ?
+		int nbVilles = this.m_instance.getNbCities();
 		long[] distances = new long[nbVilles]; // liste des distances en fontion du point de départ
 		List<List<Integer>> solutions = new ArrayList<List<Integer>>(); // liste des solutions en fonction du point de départ
 		for(int i = 0; i<nbVilles; i++) {
