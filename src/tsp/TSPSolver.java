@@ -9,6 +9,7 @@ import tsp.metaheuristic.LocalSearchSwap;
 import tsp.metaheuristic.TwoOpt;
 import tsp.metaheuristic.AlgorithmeGenetique;
 import tsp.metaheuristic.K_opt;
+import tsp.metaheuristic.K_optAvecLimiteDeTemps;
 
 /**
  * 
@@ -138,6 +139,12 @@ public class TSPSolver {
 		K_opt method = new K_opt(m_instance);
 		Solution sol = method.solve(s.getSolution());
 		this.setSolution(sol);*/
+		
+		PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
+		s.solve();
+		K_optAvecLimiteDeTemps method = new K_optAvecLimiteDeTemps(m_instance);
+		Solution sol = method.solve(s.getSolution());
+		this.setSolution(sol);
 	}
 
 	// -----------------------------
