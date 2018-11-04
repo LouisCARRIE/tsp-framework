@@ -1,5 +1,7 @@
+/*
+ * 
+ */
 package tsp.heuristic;
-
 
 
 import tsp.Instance;
@@ -7,18 +9,64 @@ import tsp.Solution;
 import tsp.util.Couple;
 import tsp.util.TripletPheroDistanceVisite;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ColonieDeFourmis.
+ * @author Brendan Becaert
+ */
 
 
 public class ColonieDeFourmis extends AHeuristic  {
+	
+	
+	/**
+	 * Instantiates a new colonie de fourmis.
+	 *
+	 * @param instance the instance
+	 * @throws Exception the exception
+	 */
 
 	public ColonieDeFourmis(Instance instance) throws Exception {
 		super(instance, "Colonie de fourmis");
 		// TODO Auto-generated constructor stub
 	}
 	
-	public double ProbaVille (int i, int j, TripletPheroDistanceVisite[][] V) {
+	/**
+	 * Initianilisation arretes.
+	 *
+	 * @return l'initianilisation de la liste des matrices caractéristiques de chaque fourmis.
+	 * @throws Exception the exception
+	 */
+	public  TripletPheroDistanceVisite[][][] InitianilisationArretes() throws Exception  {
+		int nbvilles = this.m_instance.getNbCities();
+		int nombreFourmis=100;
+		TripletPheroDistanceVisite[][][] Arretes = new TripletPheroDistanceVisite[nombreFourmis][nbvilles][nbvilles];
+		for (TripletPheroDistanceVisite [][] fourmis : Arretes) { 	  	    	  	   		 	
+			for (int ligne=0; ligne< fourmis.length; ligne ++) { 	  	    	  	   		 		  	    	  	   		 	
+				for (int colonne=0; colonne < fourmis[0].length; colonne++) { 	  	    	  	   		 	
+					if (ligne!=colonne) { 
+						fourmis[ligne][colonne]=new  TripletPheroDistanceVisite(5, this.m_instance.getDistances(ligne, colonne), false); 	  	    	  	   		 						
+					} 	  	    	  	   		 	 	  	    	  	   		 	
+				} 	  	    	  	   		 				 	  	    	  	   		 	
+			} 
+		
+		}
+		return Arretes;
+	}
+	
+	
+	/**
+	 * Proba ville.
+	 *
+	 * @param i indice de ville
+	 * @param j indice de ville
+	 * @param V the v
+	 * @return l'initianilisation de la liste des matrices caractéristiques de chaque fourmis.
+	 */
+	
+	public static double ProbaVille (int i, int j, TripletPheroDistanceVisite[][] V) {
 		double p =0.0;
-		if (V[i][j]!= null) {
+		if (V[i][j]!=null) {
 			if (V[i][j].isVisite()) {
 			
 			}
@@ -29,6 +77,13 @@ public class ColonieDeFourmis extends AHeuristic  {
 		return p;
 		
 	}
+	
+	/**
+	 * Maj phero.
+	 *
+	 * @param V the v
+	 * @return la meme matrice avec les caractéristiques mis à jour
+	 */
 	
 	public static void MajPhero(TripletPheroDistanceVisite[][][] V ) {
 		int somme = 0;
@@ -50,56 +105,23 @@ public class ColonieDeFourmis extends AHeuristic  {
 			for (int j=0; j<V[0].length; j++) { 	  	    	  	   		 	
 				int i=1; 	  	    	  	   		 	
 				for (int l =0; l<i; l++) { 
-					if(V[k][j][l]!=null) {
 					if(V[k][j][l].isVisite()==false) {
 					V[k][j][l].setPheno(rho*V[k][j][l].getPheno()+somme);
 					V[k][l][j].setPheno(rho*V[k][l][j].getPheno()+somme);
 					}
-					}
 				} 	  	    	  	   		 	
 				i++; 	  	    	  	   		 	
 			} 	  	    	  	   		 	
-		} 	  	    	  	   		 	
-
-		
+		} 
 	}
 	
-	public Couple MaxTableauSup(double [][] t) {
-		int ligne =0;
-		double max=0.0;
-		Couple c=new Couple();
-		while (ligne<t.length) {
-			int colonne =ligne;
-			while (colonne<ligne) {
-				if (t[ligne][colonne]>max) {
-					c.setX(ligne);
-					c.setY(colonne);
-				}
-			}
-		}
-		return c;
-	}
-	
-	public int indiceMinDistance (Couple[][] c) throws Exception {
-		int indice=0;
-		long distanceMin=10^100;
-		int [] L = new int [c[0].length];
-		for (int k = 0; k < c.length; k++) {
-			long distance=distanceMin;
-			for (int j=0; j < c[0].length; j++) {
-				L = new int [c[0].length];
-				if (c[k][j]!=null) {
-					L[j]=c[k][j].getX();
-				}
-			}
-			distance = distance(L);
-			if (distance<distanceMin) {
-				indice=k;
-				distanceMin=distance;
-			}
-		}
-		return indice;
-	}
+	/**
+	 * Distance.
+	 *
+	 * @param c un tableau de villes
+	 * @return la distance parcourant le chemin passsant par les villes de c
+	 * @throws Exception the exception
+	 */
 	
 	public long distance (int[] c)throws Exception {
 		long distance=0;
@@ -110,92 +132,93 @@ public class ColonieDeFourmis extends AHeuristic  {
 		return distance;
 	}
 	
-public  TripletPheroDistanceVisite[][][] InitianilisationArretes() throws Exception  {
-	int nbvilles = this.m_instance.getNbCities();
-	int nombreFourmis=100;
-	TripletPheroDistanceVisite[][][] Arretes = new TripletPheroDistanceVisite[nombreFourmis][nbvilles][nbvilles];
-	for (TripletPheroDistanceVisite [][] fourmis : Arretes) { 	  	    	  	   		 	
-		for (int ligne=0; ligne< fourmis.length; ligne ++) { 	  	    	  	   		 		  	    	  	   		 	
-			for (int colonne=0; colonne < fourmis[0].length; colonne++) { 	  	    	  	   		 	
-				if (ligne!=colonne) { 
-					fourmis[ligne][colonne]=new  TripletPheroDistanceVisite(5, this.m_instance.getDistances(ligne, colonne), false); 	  	    	  	   		 						
-				} 	  	    	  	   		 	 	  	    	  	   		 	
-			} 	  	    	  	   		 				 	  	    	  	   		 	
-		} 
+
+
+
+	/**
+	 * Ville suivante.
+	 *
+	 * @param proba tableau de double ayant pour arguments, l'indice de la ville et la probabilité qui lui correspond
+	 * @return l'indice de la ville suivante à visiter en prenant en compte les probabilités que chaque ville soient choisies
+	 */
 	
-	}
-	return Arretes;
-}
-	public Couple[][] InitialinisationVillesFourmis(){
-		int nbvilles = this.m_instance.getNbCities();
-		int nombreFourmis=100;
-		Couple[][] VillesFourmis = new Couple[nombreFourmis][nbvilles];	  	    	  	   		 	 	  	    	  	   		 	
-	   		for (int l =0; l<nombreFourmis; l++) {
-	   			VillesFourmis[l][0]= new Couple(0,0);
-	   		}
-	   		return VillesFourmis;	   		
-	}
-	
-	public static int  VilleSuivante( double[][] proba) {
+	public static int   VilleSuivante( double[][] proba) {
 		int nbVillesNonVisitees = proba.length;
 		double[] probaponderees = new double[nbVillesNonVisitees];
 		for (int i=0; i<probaponderees.length; i++) {
 			probaponderees[i]=proba[i][1]*i;
 			}
-		double rang = Math.random()*proba.length;
+		double rang = Math.random()*proba[proba.length-1][0];
 		int indice =(int)proba[0][0];
 		int k=0;
-		while (rang<probaponderees[k]) {
+		while ( k<probaponderees.length&&probaponderees[k]<rang) {
 			indice =(int)proba[k][0];
 			k++;
 		}
 		return indice;
 		}
 	
+	/**
+	 * Solve.
+	 *
+	 * @return l'initianilisation de la liste des matrices caractéristiques de chaque fourmis.
+	 * @throws Exception the exception
+	 */
+	
 	@Override
 	public void solve() throws Exception {
+		long tempsIni = System.currentTimeMillis();
 		int nbvilles = this.m_instance.getNbCities();;
-		int nbFourmis=10;
-		int quantitePhero=5;
-		double [][] listeProba = new double [nbvilles][2];
-		TripletPheroDistanceVisite[][][] Arretes = new TripletPheroDistanceVisite[nbFourmis][nbvilles][nbvilles]; 
-  	   	long meilleuredistance=2*10^25;
-  	   	Arretes=InitianilisationArretes();
-  	   	int [] meilleurChemin = new int [nbvilles+1];
+		int nbFourmis=5;
+		TripletPheroDistanceVisite[][][] Fourmis = new TripletPheroDistanceVisite[nbFourmis][nbvilles][nbvilles]; 
   	   	
-  	   	while (quantitePhero>0) {
-  	   	int ite =0;
-  	   		for ( int f=0; f<Arretes.length; f++) {
-  	   			int[] VillesVisitees = new int [nbvilles+1];
-  	   			VillesVisitees[0]=0;
-  	   			VillesVisitees[nbvilles]=0; 		
-  	   			for (int k=0; k<nbvilles-1; k++) {
-  	   				listeProba = new double [nbvilles-ite+1][2];
-  	   				for (int j=0; j<nbvilles-ite+1; j++) {
-  	   					if (Arretes[f][VillesVisitees[k]][k]!=null) {
-  	   					if (Arretes[f][VillesVisitees[k]][k].isVisite()==false) {
-  	   						listeProba[j][0]=j;
-  	   						listeProba[j][1]=Arretes[f][VillesVisitees[k]][k].getPheno()/Arretes[f][VillesVisitees[k]][k].getDistance();
+  	   	Fourmis=InitianilisationArretes();
+  	   	int [] meilleurChemin = new int [nbvilles+1];
+  	   	for (int i = 0 ; i< meilleurChemin.length; i++) {
+  	   		meilleurChemin[i]=i;
+  	   	}
+  	   	meilleurChemin[meilleurChemin.length-1]=0;
+  	  long meilleuredistance=distance(meilleurChemin);
+  	   	int[] VillesVisitees = new int [nbvilles+1];
+  	   	VillesVisitees[0]=0;
+		VillesVisitees[nbvilles]=0;
+		int VilleSuivante=1;
+		double [][] listeProba = new double [nbvilles][2];
+		
+  	   	while (System.currentTimeMillis()-tempsIni<50000) {
+  	   		for ( int f=0; f<Fourmis.length; f++) {
+  	   			System.out.println("FOURMI NUMERO : "+f);
+  	   			for (int k=0; k<nbvilles-1; k++) { 
+  	   				listeProba = new double [nbvilles-k-1][2];
+  	   				double i =0.0;
+  	   				for (double [] v : listeProba) {
+  	   					if (i<Fourmis[f].length) {
+  	   						
+  	   						System.out.println("ville "+(int)i);
+  	   						v[0]=i;
+  	   						v[1]=ProbaVille(k, (int)i, Fourmis[f]) ;	
   	   					}
-  	   					}
+ 						i+=1.0;	
   	   				}
-  	   				int VilleSuivante=VilleSuivante(listeProba);
+  	   				
+  	   				VilleSuivante=VilleSuivante(listeProba);  			
   	   				VillesVisitees[k]=VilleSuivante;
-  	   			}
+  	   			
+  	   			
+  	   		
   	   			long distanceParcourue=distance(VillesVisitees);
-  	   			if (distanceParcourue<meilleuredistance) {
-  	   				meilleuredistance=distanceParcourue;
-  	   				meilleurChemin=VillesVisitees;
+	   			if (distanceParcourue<meilleuredistance) {
+	   				meilleuredistance=distanceParcourue;
+	   				meilleurChemin=VillesVisitees;
+	   				}
   	   			}
   	   		}
-  	   		MajPhero(Arretes);
-  	   		ite++;		
-  	   		quantitePhero--;
-		}
+  	   	}
   	   	
   	   	//Elaboration de la solution 
   	   	Solution s = new Solution(m_instance);
 		for (int e = 0; e<meilleurChemin.length ; e++) {
+			System.out.println("solution"+meilleurChemin[e]);
 			s.setCityPosition(meilleurChemin[e], e);
 		}
 		m_solution = s;
