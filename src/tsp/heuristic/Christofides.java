@@ -131,7 +131,7 @@ public class Christofides extends AHeuristic{
 	}
 	
 	/**
-	 * Retire les Couple qui ont leur abscisse égale à ligne et les Couple qui ont leur ordonnee egal à colonne.
+	 * Retire les Couple qui ont leur abscisse egale à ligne et les Couple qui ont leur ordonnee egal à colonne.
 	 *
 	 * @param l la liste de liste de Couple
 	 * @param ligne

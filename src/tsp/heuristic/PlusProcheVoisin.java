@@ -14,7 +14,7 @@ public class PlusProcheVoisin extends AHeuristic{
 	/**
 	 * Instantiates a new plus proche voisin.
 	 *
-	 * @param instance the instance
+	 * @param instance the Instance
 	 * @throws Exception the exception
 	 */
 	public PlusProcheVoisin(Instance instance) throws Exception {
