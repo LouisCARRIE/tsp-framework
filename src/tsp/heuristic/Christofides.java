@@ -156,7 +156,7 @@ public class Christofides extends AHeuristic{
 	 * Algo de Prim.
 	 *
 	 * @param instance the instance
-	 * @return une liste correspondant à un arbre de recouvrement de poids minimal
+	 * @return une liste correspondant a un arbre de recouvrement de poids minimal
 	 * arbre.get(i) renvoie les sommets suivant du sommet i
 	 * @throws Exception the exception
 	 */

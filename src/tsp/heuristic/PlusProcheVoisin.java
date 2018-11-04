@@ -42,7 +42,7 @@ public class PlusProcheVoisin extends AHeuristic{
 	@Override
 	public void solve() throws Exception {
 		int nbVilles = this.m_instance.getNbCities();
-		long[] distances = new long[nbVilles]; // liste des distances en fontion du point de départ
+		long[] distances = new long[nbVilles]; // liste des distances en fontion du point de depart
 		List<List<Integer>> solutions = new ArrayList<List<Integer>>(); // liste des solutions en fonction du point de départ
 		for(int i = 0; i<nbVilles; i++) {
 			solutions.add(new ArrayList<Integer>());
