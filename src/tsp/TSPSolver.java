@@ -105,9 +105,9 @@ public class TSPSolver {
 		glouton.solve();
 		this.setSolution(glouton.getSolution());*/
 		
-		AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
+		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
 		genetique.solve();
-		this.setSolution(genetique.getSolution());
+		this.setSolution(genetique.getSolution());*/
 		
 		/*LocalSearch localSearch = new LocalSearch(m_instance);
 		localSearch.solve();
@@ -117,9 +117,9 @@ public class TSPSolver {
 		Christofides.solve();
 		this.setSolution(Christofides.getSolution());*/
 		
-		/*ColonieDeFourmis fourmis = new ColonieDeFourmis(m_instance);
+		ColonieDeFourmis fourmis = new ColonieDeFourmis(m_instance);
 		fourmis.solve();
-		this.setSolution(fourmis.getSolution());*/
+		this.setSolution(fourmis.getSolution());
 		
 		/*TwoOpt opt = new TwoOpt(m_instance);
 		Solution s = opt.solve(new Solution(m_instance));
