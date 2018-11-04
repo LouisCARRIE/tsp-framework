@@ -108,13 +108,9 @@ public class TSPSolver {
 		this.setSolution(glouton.getSolution());*/
 		
 		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
-<<<<<<< HEAD
-		genetique.solve();
-		this.setSolution(genetique.getSolution());*/
-/*=======
 		Solution s = genetique.solve(new Solution(m_instance));
 		this.setSolution(s);*/
-/*>>>>>>> branch 'master' of https://github.com/LouisCARRIE/tsp-framework*/
+
 		
 		/*LocalSearchSwap localSearchSwap = new LocalSearchSwap(m_instance);
 		Solution s = localSearchSwap.solve(new Solution(m_instance));
