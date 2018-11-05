@@ -9,6 +9,9 @@ import tsp.Solution;
 import tsp.util.Couple;
 import tsp.util.TripletPheroDistanceVisite;
 
+
+
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class ColonieDeFourmis.
