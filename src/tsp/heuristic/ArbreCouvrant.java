@@ -93,7 +93,6 @@ public class ArbreCouvrant extends AHeuristic{
 	 */
 	public void explorer(List<List<Integer>> arbre, int villeVisitee) throws Exception {
 		this.villesMarquees.add(villeVisitee);
-		System.out.println(villeVisitee);
 		for(int villeFils : arbre.get(villeVisitee)) {
 			if(!(this.villesMarquees.contains(villeFils))) {
 				explorer(arbre, villeFils);
@@ -104,7 +103,6 @@ public class ArbreCouvrant extends AHeuristic{
 	@Override
 	public void solve() throws Exception {
 		List<List<Integer>> arbre = algoPrim(this.m_instance);
-		System.out.println(arbre);
 		int debut = 0;
 		explorer(arbre, debut);
 		Solution sol = new Solution(this.m_instance);
