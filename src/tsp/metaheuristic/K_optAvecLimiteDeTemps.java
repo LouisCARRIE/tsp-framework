@@ -527,7 +527,7 @@ public class K_optAvecLimiteDeTemps extends AMetaheuristic{
 	 * @param v : liste des voisins (v.get(i) renvoie les plus proches voisins de la ville i)
 	 * @return la solution améliorer par l'algo K-opt
 	 * @throws Exception the exception
-	 */ 
+	 */
 	public List<Integer> k_opt(Instance instance, List<Integer> sol, Voisins v, long timeLimit) throws Exception{
 		List<Integer> solution = two_opt(this.m_instance, sol, v, timeLimit);;
 		List<Integer> solution1 = sol;
@@ -547,6 +547,7 @@ public class K_optAvecLimiteDeTemps extends AMetaheuristic{
 					solution = two_opt(this.m_instance, solution, v, timeLimit * 1000 - spentTime);
 					b = true;
 				}
+				spentTime = System.currentTimeMillis() - startTime;
 			}
 			solution2 = new ArrayList<Integer>(solution);
 			solution = four_opt(this.m_instance, solution, v, timeLimit* 1000 - spentTime);
