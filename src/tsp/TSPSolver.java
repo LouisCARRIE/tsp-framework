@@ -108,13 +108,9 @@ public class TSPSolver {
 		this.setSolution(glouton.getSolution());*/
 		
 		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
-<<<<<<< HEAD
-		genetique.solve();
-		this.setSolution(genetique.getSolution());*/
-/*=======
 		Solution s = genetique.solve(new Solution(m_instance));
 		this.setSolution(s);*/
-/*>>>>>>> branch 'master' of https://github.com/LouisCARRIE/tsp-framework*/
+
 		
 		/*LocalSearchSwap localSearchSwap = new LocalSearchSwap(m_instance);
 		Solution s = localSearchSwap.solve(new Solution(m_instance));
@@ -128,9 +124,9 @@ public class TSPSolver {
 		fourmis.solve();
 		this.setSolution(fourmis.getSolution());*/
 		
-		/*TwoOpt opt = new TwoOpt(m_instance);
+		TwoOpt opt = new TwoOpt(m_instance);
 		Solution s = opt.solve(new Solution(m_instance));
-		this.setSolution(s);*/
+		this.setSolution(s);
 		
 		/*On choisit une heuristique qui donne une solution approchée en premier lieu
 		 * C'est cette solution que l'on va améliorer*/
@@ -140,11 +136,11 @@ public class TSPSolver {
 		Solution sol = method.solve(s.getSolution());
 		this.setSolution(sol);*/
 		
-		PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
+		/*PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
 		s.solve();
 		K_optAvecLimiteDeTemps method = new K_optAvecLimiteDeTemps(m_instance);
 		Solution sol = method.solve(s.getSolution());
-		this.setSolution(sol);
+		this.setSolution(sol);*/
 	}
 
 	// -----------------------------
