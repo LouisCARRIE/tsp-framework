@@ -650,7 +650,7 @@ public class Christofides extends AHeuristic{
 					for (Couple c : this.matchFinal) {
 						zerosEncadres.add(c);
 					}
-					//System.out.println(listToString(zerosEncadres));
+					
 					
 				}
 				
@@ -842,7 +842,6 @@ public class Christofides extends AHeuristic{
 		}
 		chemin.add(x);
 		while(!isEmpty1(graphe)) { //il faudrait tester avant si le graphe est eulerien, si il ne l'est pas modifier biparti
-			//System.out.println(x);
 			for(int y : graphe.get(x)) {
 				this.villesMarquees.clear();
 				copyGraphe = remove2(copyGraphe, x, y);
@@ -980,8 +979,7 @@ public class Christofides extends AHeuristic{
 		List<Couple> couplage = creationCouplageParfait(this.m_instance, biparti);
 		
 		List<List<Integer>> union = union(arbre, couplage);
-		//System.out.println(estEulerien(union));
-		//System.out.println(union);
+
 		List<Integer> tour = tourEulerien(this.m_instance, union);
 		List<Integer> solution = supprimerDoublons(tour);
 		Solution sol = new Solution(this.m_instance);
