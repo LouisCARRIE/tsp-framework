@@ -111,7 +111,6 @@ public class TSPSolver {
 		Solution s = genetique.solve(new Solution(m_instance));
 		this.setSolution(s);
 
-		
 		/*LocalSearchSwap localSearchSwap = new LocalSearchSwap(m_instance);
 		Solution s = localSearchSwap.solve(new Solution(m_instance));
 		this.setSolution(s);*/
