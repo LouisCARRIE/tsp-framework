@@ -262,7 +262,7 @@ public class K_opt extends AMetaheuristic{
 					List<Integer> union = union(v.get(i), v.get(j));
 					if (stop) {
 						break;
-					}
+					} 
 					for (int k : union) {
 						int k_index = solution.indexOf(k);
 						int k1_index = (k_index + 1)%instance.getNbCities();
