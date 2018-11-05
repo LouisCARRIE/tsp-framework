@@ -523,7 +523,7 @@ public class K_optAvecLimiteDeTemps extends AMetaheuristic{
 	 * on fait tourner 4-opt et on recommence l'étape précédente si 4-opt a amélioré la solution.
 	 *
 	 * @param instance the instance
-	 * @param sol : la solution initiale que l'on va améliorer (sol peut être la solution de plusProcheVoisin ...)
+	 * @param sol : la solution initiale que l'on va améliorer (sol peut être la solution de plusProcheVoisin ... )
 	 * @param v : liste des voisins (v.get(i) renvoie les plus proches voisins de la ville i)
 	 * @return la solution améliorer par l'algo K-opt
 	 * @throws Exception the exception
