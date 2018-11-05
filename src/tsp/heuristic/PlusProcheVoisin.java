@@ -25,7 +25,7 @@ public class PlusProcheVoisin extends AHeuristic{
 	 * Removes l'element point dans la liste l.
 	 *
 	 * @param l the list
-	 * @param point the point
+	 * @param point : un int
 	 * @return la liste l sans l'element point
 	 */
 	public static List<Integer> remove1(List<Integer> l, int point) {
@@ -47,7 +47,8 @@ public class PlusProcheVoisin extends AHeuristic{
 		for(int i = 0; i<nbVilles; i++) {
 			solutions.add(new ArrayList<Integer>());
 		}
-		for(int pointDepart = 0; pointDepart < nbVilles; pointDepart ++) { //A MODIFIER
+		/*On va regarder pour chaque point de depart la distance du parcours*/
+		for(int pointDepart = 0; pointDepart < nbVilles; pointDepart ++) {
 			int pointCourant = pointDepart;
 			solutions.get(pointDepart).add(pointDepart);
 			long distance = 0;
@@ -56,10 +57,10 @@ public class PlusProcheVoisin extends AHeuristic{
 				villesRestantes.add(j);
 			}
 			villesRestantes = remove1(villesRestantes, pointDepart);
-			for (int k = 0; k<nbVilles-1; k++) {
+			for (int k = 0; k<nbVilles-1; k++) { //On fabrique un chemin qui va passer par tous les points
 				long distanceTemp = this.m_instance.getDistances(pointCourant, villesRestantes.get(0));
 				int pointSuivant = villesRestantes.get(0);
-				for(int i : villesRestantes) { // on cherche la ville la plus proche du point courant
+				for(int i : villesRestantes) { // On cherche la ville la plus proche du point courant
 					if (this.m_instance.getDistances(pointCourant, i) < distanceTemp) {
 						distanceTemp = this.m_instance.getDistances(pointCourant, i);
 						pointSuivant = i;
