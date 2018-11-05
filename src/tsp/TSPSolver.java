@@ -93,7 +93,7 @@ public class TSPSolver {
 		}while(spentTime < (m_timeLimit * 1000 - 100) );*/
 		
 		
-		
+	
 		/*ArbreCouvrant method = new ArbreCouvrant(m_instance);
 		method.solve();
 		this.setSolution(method.getSolution());*/
@@ -107,9 +107,9 @@ public class TSPSolver {
 		glouton.solve();
 		this.setSolution(glouton.getSolution());*/
 		
-		/*AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
+		AlgorithmeGenetique genetique = new AlgorithmeGenetique(m_instance);
 		Solution s = genetique.solve(new Solution(m_instance));
-		this.setSolution(s);*/
+		this.setSolution(s);
 
 		
 		/*LocalSearchSwap localSearchSwap = new LocalSearchSwap(m_instance);
@@ -137,11 +137,11 @@ public class TSPSolver {
 		Solution sol = method.solve(s.getSolution());
 		this.setSolution(sol);*/
 		
-		PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
+		/*PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
 		s.solve();
 		K_optAvecLimiteDeTemps method = new K_optAvecLimiteDeTemps(m_instance);
 		Solution sol = method.solve(s.getSolution());
-		this.setSolution(sol);
+		this.setSolution(sol);*/
 	}
 
 	// -----------------------------
