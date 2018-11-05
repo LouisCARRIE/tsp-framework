@@ -85,7 +85,11 @@ public class PlusProcheVoisin extends AHeuristic{
 		}
 
 
-		
+		//des lignes 93-102, creation d'une tournee ou la ville 0 n'est
+		//pas forcement en debut et en fin de tournee
+		//si l'on veut que la ville 0 soit en debut et fin de tournee,
+		//il faut mettre les lignes 93-102 en commentaires 
+		//et decommenter les lignes 106-120
 		Solution sol = new Solution(this.m_instance);
 		int k = solutions.get(depart).indexOf(0);
 		
@@ -97,7 +101,8 @@ public class PlusProcheVoisin extends AHeuristic{
 		}
 		this.m_solution = sol;
 		
-		
+		//partie a decommenter si l'on veut que la ville 0
+		//soit visitee en debut et en fin de tournee
 		/*Solution sol = new Solution(this.m_instance);
 		int k = solutions.get(depart).indexOf(0);
 		
