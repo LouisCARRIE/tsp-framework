@@ -57,7 +57,7 @@ public class PlusProcheVoisin extends AHeuristic{
 				villesRestantes.add(j);
 			}
 			villesRestantes = remove1(villesRestantes, pointDepart);
-			for (int k = 0; k<nbVilles-1; k++) { //On fabrique un chemin qui va passer par tous les points 
+			for (int k = 0; k<nbVilles-1; k++) { //On fabrique un chemin qui va passer par tous les points
 				long distanceTemp = this.m_instance.getDistances(pointCourant, villesRestantes.get(0));
 				int pointSuivant = villesRestantes.get(0);
 				for(int i : villesRestantes) { // On cherche la ville la plus proche du point courant
