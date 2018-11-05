@@ -538,7 +538,6 @@ public class K_optAvecLimiteDeTemps extends AMetaheuristic{
 		//System.out.println(cost(instance, solution));
 		while(!egal(solution2, solution) && spentTime < (timeLimit * 1000 - 100)) {
 			while(!egal(solution, solution1) && spentTime < (timeLimit * 1000 - 100)) {
-				System.out.println(cost(instance, solution));
 				if (b) {
 					solution1 = new ArrayList<Integer>(solution);
 					solution = three_opt(this.m_instance, solution, v, timeLimit * 1000 - spentTime);

@@ -526,7 +526,6 @@ public class K_opt extends AMetaheuristic{
 		//System.out.println(cost(instance, solution));
 		while(!egal(solution2, solution)) {
 			while(!egal(solution, solution1)) {
-				System.out.println(cost(instance, solution));
 				if (b) {
 					solution1 = new ArrayList<Integer>(solution);
 					solution = three_opt(this.m_instance, solution, v);
