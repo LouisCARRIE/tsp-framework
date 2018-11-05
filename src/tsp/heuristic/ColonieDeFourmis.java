@@ -187,14 +187,12 @@ public class ColonieDeFourmis extends AHeuristic  {
 		
   	   	while (System.currentTimeMillis()-tempsIni<50000) {
   	   		for ( int f=0; f<Fourmis.length; f++) {
-  	   			System.out.println("FOURMI NUMERO : "+f);
   	   			for (int k=0; k<nbvilles-1; k++) { 
   	   				listeProba = new double [nbvilles-k-1][2];
   	   				double i =0.0;
   	   				for (double [] v : listeProba) {
   	   					if (i<Fourmis[f].length) {
   	   						
-  	   						System.out.println("ville "+(int)i);
   	   						v[0]=i;
   	   						v[1]=ProbaVille(k, (int)i, Fourmis[f]) ;	
   	   					}
@@ -218,7 +216,6 @@ public class ColonieDeFourmis extends AHeuristic  {
   	   	//Elaboration de la solution 
   	   	Solution s = new Solution(m_instance);
 		for (int e = 0; e<meilleurChemin.length ; e++) {
-			System.out.println("solution"+meilleurChemin[e]);
 			s.setCityPosition(meilleurChemin[e], e);
 		}
 		m_solution = s;
