@@ -83,15 +83,12 @@ public class PlusProcheVoisin extends AHeuristic{
 				depart = i;
 			}
 		}
-		 
-		
-		
 		
 		Solution sol = new Solution(this.m_instance);
 		int k = solutions.get(depart).indexOf(0);
 		
 		
-		
+		k = 0;
 		for(int i : solutions.get(depart)) {
 			sol.setCityPosition(i, k);
 			k++;
