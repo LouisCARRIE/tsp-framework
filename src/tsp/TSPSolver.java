@@ -98,9 +98,9 @@ public class TSPSolver {
 		method.solve();
 		this.setSolution(method.getSolution());*/
 
-		PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
+		/*PlusProcheVoisin method = new PlusProcheVoisin(m_instance);
 		method.solve();
-		this.setSolution(method.getSolution());
+		this.setSolution(method.getSolution());*/
 		 
 		
 		/*AlgorithmeGlouton glouton = new AlgorithmeGlouton(m_instance);
@@ -137,11 +137,11 @@ public class TSPSolver {
 		Solution sol = method.solve(s.getSolution());
 		this.setSolution(sol);*/
 		
-		/*PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
+		PlusProcheVoisin s = new PlusProcheVoisin(this.m_instance);
 		s.solve();
 		K_optAvecLimiteDeTemps method = new K_optAvecLimiteDeTemps(m_instance);
 		Solution sol = method.solve(s.getSolution());
-		this.setSolution(sol);*/
+		this.setSolution(sol);
 	}
 
 	// -----------------------------

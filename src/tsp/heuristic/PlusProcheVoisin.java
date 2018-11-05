@@ -83,6 +83,8 @@ public class PlusProcheVoisin extends AHeuristic{
 				depart = i;
 			}
 		}
+
+
 		
 		Solution sol = new Solution(this.m_instance);
 		int k = solutions.get(depart).indexOf(0);
@@ -94,5 +96,22 @@ public class PlusProcheVoisin extends AHeuristic{
 			k++;
 		}
 		this.m_solution = sol;
+		
+		
+		/*Solution sol = new Solution(this.m_instance);
+		int k = solutions.get(depart).indexOf(0);
+		
+		int j = 0;
+		
+		for (int i=k ; i<solutions.get(depart).size() ; i++) {
+			sol.setCityPosition(solutions.get(depart).get(i), j);
+			j++;
+		}
+		
+		for (int i=1 ; i<=k ; i++) {
+			sol.setCityPosition(solutions.get(depart).get(i), j);
+			j++;
+		}
+		this.m_solution = sol;*/
 	}
 }

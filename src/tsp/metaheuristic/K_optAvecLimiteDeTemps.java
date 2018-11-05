@@ -570,7 +570,7 @@ public class K_optAvecLimiteDeTemps extends AMetaheuristic{
 		
 		//int m = this.m_instance.getNbCities();
 		int m = 40;
-		long timeLimit = 10;
+		long timeLimit = 2;
 		
 		
 		//On récupère la liste des m plus proches voisins pour chaque node
@@ -587,15 +587,22 @@ public class K_optAvecLimiteDeTemps extends AMetaheuristic{
 		
 		
 		solution = k_opt(this.m_instance, solution, v, timeLimit);
-		
-		
 		solution.add(solution.get(0));
 		Solution sol = new Solution(this.m_instance);
-		int k = 0;
-		for(int i : solution) {
-			sol.setCityPosition(i, k);
-			k++;
+		int k = solution.indexOf(0);
+		
+		int j = 0;
+		
+		for (int i=k ; i<solution.size() ; i++) {
+			sol.setCityPosition(solution.get(i), j);
+			j++;
 		}
+		
+		for (int i=1 ; i<=k ; i++) {
+			sol.setCityPosition(solution.get(i), j);
+			j++;
+		}
+		
 		return sol;
 	}
 }
