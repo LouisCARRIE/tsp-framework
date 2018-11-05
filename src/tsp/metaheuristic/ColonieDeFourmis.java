@@ -1,7 +1,7 @@
 /*
  * 
  */
-package tsp.heuristic;
+package tsp.metaheuristic;
 
 
 import tsp.Instance;
@@ -19,7 +19,7 @@ import tsp.util.TripletPheroDistanceVisite;
  */
 
 
-public class ColonieDeFourmis extends AHeuristic  {
+public class ColonieDeFourmis extends AMetaheuristic  {
 	
 	
 	/**
@@ -168,8 +168,10 @@ public class ColonieDeFourmis extends AHeuristic  {
 	 * @throws Exception the exception
 	 */
 	
+	
+
 	@Override
-	public void solve() throws Exception {
+	public Solution solve(Solution sol) throws Exception {
 		long tempsIni = System.currentTimeMillis();
 		int nbvilles = this.m_instance.getNbCities();;
 		int nbFourmis=5;
@@ -205,7 +207,7 @@ public class ColonieDeFourmis extends AHeuristic  {
   	   				
   	   				VilleSuivante=VilleSuivante(listeProba);  			
   	   				VillesVisitees[k]=VilleSuivante;
-  	   				Fourmis[f][k][VilleSuivante].setVisite(true);
+  	   				
   	   			
   	   		
   	   			long distanceParcourue=distance(VillesVisitees);
@@ -218,11 +220,10 @@ public class ColonieDeFourmis extends AHeuristic  {
   	   	}
   	   	
   	   	//Elaboration de la solution 
-  	   	Solution s = new Solution(m_instance);
 		for (int e = 0; e<meilleurChemin.length ; e++) {
-			s.setCityPosition(meilleurChemin[e], e);
+			sol.setCityPosition(meilleurChemin[e], e);
 		}
-		m_solution = s;
+		return sol;
 			}
-  	   	}
+}
 
