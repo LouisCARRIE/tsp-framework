@@ -570,7 +570,7 @@ public class K_optAvecLimiteDeTemps extends AMetaheuristic{
 		
 		//int m = this.m_instance.getNbCities();
 		int m = 40;
-		long timeLimit = 51;
+		long timeLimit = 10;
 		
 		
 		//On récupère la liste des m plus proches voisins pour chaque node
